@@ -2,6 +2,7 @@
 using DABMusicDownloader.Models.Discography;
 using DABMusicDownloader.Models.Search;
 using DABMusicDownloader.Models.Stream;
+using DABMusicDownloader.Properties;
 using RestSharp;
 using System.Net;
 using System.Text.Json;
@@ -10,7 +11,7 @@ namespace DABMusicDownloader.Classes
 {
     internal class DABMusicPlayerAPI
     {
-        private const string BaseUrl = "https://dabmusic.xyz/api";
+        private static readonly string BaseUrl = Settings.Default.BaseURL;
 
         public static async Task<SearchResponse?> SearchAsync(string query, SearchType type, int limit = 0, int offset = 0)
         {
