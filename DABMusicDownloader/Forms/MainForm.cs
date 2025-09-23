@@ -9,6 +9,11 @@ namespace DABMusicDownloader.Forms
             cmbSearchType.SelectedIndex = 0;
         }
 
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().ShowDialog(this);
+        }
+
         private void txtSearchQuery_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter) return;
@@ -19,9 +24,22 @@ namespace DABMusicDownloader.Forms
             e.SuppressKeyPress = true;
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-            new SettingsForm().ShowDialog(this);
+
+        }
+
+        private void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex >= dgvSearchResults.RowCount)
+            {
+
+            }
+        }
+
+        private void btnDownloadSelected_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

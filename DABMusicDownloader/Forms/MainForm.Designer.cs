@@ -29,50 +29,44 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            statusStrip1 = new StatusStrip();
-            panel1 = new Panel();
+            pnlSearch = new Panel();
             lblSearchResults = new Label();
             cmbSearchType = new ComboBox();
             txtSearchQuery = new TextBox();
             btnSearch = new Button();
-            menuStrip1 = new MenuStrip();
+            menuStrip = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
-            dataGridView1 = new DataGridView();
-            panel1.SuspendLayout();
-            menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            dgvSearchResults = new DataGridView();
+            pnlDownload = new Panel();
+            prgDownload = new ProgressBar();
+            btnDownloadSelected = new Button();
+            pnlSearch.SuspendLayout();
+            menuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvSearchResults).BeginInit();
+            pnlDownload.SuspendLayout();
             SuspendLayout();
             // 
-            // statusStrip1
+            // pnlSearch
             // 
-            statusStrip1.Location = new Point(0, 428);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(800, 22);
-            statusStrip1.SizingGrip = false;
-            statusStrip1.TabIndex = 1;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(lblSearchResults);
-            panel1.Controls.Add(cmbSearchType);
-            panel1.Controls.Add(txtSearchQuery);
-            panel1.Controls.Add(btnSearch);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 24);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 29);
-            panel1.TabIndex = 2;
+            pnlSearch.Controls.Add(lblSearchResults);
+            pnlSearch.Controls.Add(cmbSearchType);
+            pnlSearch.Controls.Add(txtSearchQuery);
+            pnlSearch.Controls.Add(btnSearch);
+            pnlSearch.Dock = DockStyle.Top;
+            pnlSearch.Location = new Point(0, 24);
+            pnlSearch.Name = "pnlSearch";
+            pnlSearch.Size = new Size(800, 29);
+            pnlSearch.TabIndex = 2;
             // 
             // lblSearchResults
             // 
-            lblSearchResults.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblSearchResults.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblSearchResults.Location = new Point(500, 3);
             lblSearchResults.Name = "lblSearchResults";
             lblSearchResults.Size = new Size(297, 23);
             lblSearchResults.TabIndex = 3;
-            lblSearchResults.TextAlign = ContentAlignment.BottomRight;
+            lblSearchResults.TextAlign = ContentAlignment.MiddleRight;
             // 
             // cmbSearchType
             // 
@@ -100,15 +94,16 @@
             btnSearch.TabIndex = 0;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, settingsToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
-            menuStrip1.TabIndex = 3;
-            menuStrip1.Text = "menuStrip1";
+            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, settingsToolStripMenuItem });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(800, 24);
+            menuStrip.TabIndex = 3;
+            menuStrip.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
@@ -123,56 +118,89 @@
             settingsToolStripMenuItem.Text = "Settings";
             settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
-            // dataGridView1
+            // dgvSearchResults
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.BackgroundColor = SystemColors.Control;
-            dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 53);
-            dataGridView1.MultiSelect = false;
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(800, 375);
-            dataGridView1.TabIndex = 4;
+            dgvSearchResults.AllowUserToAddRows = false;
+            dgvSearchResults.AllowUserToDeleteRows = false;
+            dgvSearchResults.BackgroundColor = SystemColors.Control;
+            dgvSearchResults.BorderStyle = BorderStyle.None;
+            dgvSearchResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvSearchResults.Dock = DockStyle.Top;
+            dgvSearchResults.Location = new Point(0, 53);
+            dgvSearchResults.MultiSelect = false;
+            dgvSearchResults.Name = "dgvSearchResults";
+            dgvSearchResults.ReadOnly = true;
+            dgvSearchResults.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgvSearchResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvSearchResults.Size = new Size(800, 369);
+            dgvSearchResults.TabIndex = 4;
+            dgvSearchResults.Scroll += dgvSearchResults_Scroll;
+            // 
+            // pnlDownload
+            // 
+            pnlDownload.Controls.Add(prgDownload);
+            pnlDownload.Controls.Add(btnDownloadSelected);
+            pnlDownload.Dock = DockStyle.Bottom;
+            pnlDownload.Location = new Point(0, 422);
+            pnlDownload.Name = "pnlDownload";
+            pnlDownload.Size = new Size(800, 29);
+            pnlDownload.TabIndex = 5;
+            // 
+            // prgDownload
+            // 
+            prgDownload.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            prgDownload.Location = new Point(3, 3);
+            prgDownload.Name = "prgDownload";
+            prgDownload.Size = new Size(250, 23);
+            prgDownload.TabIndex = 1;
+            // 
+            // btnDownloadSelected
+            // 
+            btnDownloadSelected.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDownloadSelected.Location = new Point(677, 3);
+            btnDownloadSelected.Name = "btnDownloadSelected";
+            btnDownloadSelected.Size = new Size(120, 23);
+            btnDownloadSelected.TabIndex = 0;
+            btnDownloadSelected.Text = "Download Selected";
+            btnDownloadSelected.UseVisualStyleBackColor = true;
+            btnDownloadSelected.Click += btnDownloadSelected_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(dataGridView1);
-            Controls.Add(panel1);
-            Controls.Add(statusStrip1);
-            Controls.Add(menuStrip1);
+            ClientSize = new Size(800, 451);
+            Controls.Add(pnlDownload);
+            Controls.Add(dgvSearchResults);
+            Controls.Add(pnlSearch);
+            Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = menuStrip;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            pnlSearch.ResumeLayout(false);
+            pnlSearch.PerformLayout();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvSearchResults).EndInit();
+            pnlDownload.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private StatusStrip statusStrip1;
-        private Panel panel1;
+        private Panel pnlSearch;
         private ComboBox cmbSearchType;
         private TextBox txtSearchQuery;
         private Button btnSearch;
         private Label lblSearchResults;
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem settingsToolStripMenuItem;
-        private DataGridView dataGridView1;
+        private DataGridView dgvSearchResults;
+        private Panel pnlDownload;
+        private ProgressBar prgDownload;
+        private Button btnDownloadSelected;
     }
 }
