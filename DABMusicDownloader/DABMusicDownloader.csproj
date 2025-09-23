@@ -13,4 +13,8 @@
     <Content Include="Resources\icon.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="112.1.0" />
+  </ItemGroup>
+
 </Project>
