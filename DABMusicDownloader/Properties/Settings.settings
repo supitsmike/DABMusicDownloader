@@ -8,8 +8,11 @@
     <Setting Name="DownloadLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ConcurrentDownloads" Type="System.Decimal" Scope="User">
+    <Setting Name="ConcurrentDownloads" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="SearchResultLimit" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
     </Setting>
   </Settings>
 </SettingsFile>

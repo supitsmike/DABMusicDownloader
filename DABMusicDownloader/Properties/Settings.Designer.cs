@@ -50,12 +50,24 @@ namespace DABMusicDownloader.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public decimal ConcurrentDownloads {
+        public int ConcurrentDownloads {
             get {
-                return ((decimal)(this["ConcurrentDownloads"]));
+                return ((int)(this["ConcurrentDownloads"]));
             }
             set {
                 this["ConcurrentDownloads"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int SearchResultLimit {
+            get {
+                return ((int)(this["SearchResultLimit"]));
+            }
+            set {
+                this["SearchResultLimit"] = value;
             }
         }
     }
