@@ -1,3 +1,7 @@
+using DABMusicDownloader.Classes;
+using DABMusicDownloader.Models.Search;
+using DABMusicDownloader.Properties;
+
 namespace DABMusicDownloader.Forms
 {
     public partial class MainForm : Form
