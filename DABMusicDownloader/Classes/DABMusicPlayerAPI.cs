@@ -12,7 +12,7 @@ namespace DABMusicDownloader.Classes
     {
         private static readonly string BaseUrl = Settings.Default.BaseURL;
 
-        public static async Task<SearchResponse?> SearchAsync(string query, SearchType type, int limit = 20, int offset = 0)
+        public static async Task<SearchResponse> SearchAsync(string query, SearchType type, int limit = 20, int offset = 0)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("search")
@@ -33,7 +33,7 @@ namespace DABMusicDownloader.Classes
             }
         }
 
-        public static async Task<AlbumResponse?> AlbumAsync(string albumId)
+        public static async Task<AlbumResponse> AlbumAsync(string albumId)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("album")
@@ -51,7 +51,7 @@ namespace DABMusicDownloader.Classes
             }
         }
 
-        public static async Task<DiscographyResponse?> DiscographyAsync(string artistId)
+        public static async Task<DiscographyResponse> DiscographyAsync(string artistId)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("discography")
@@ -69,7 +69,7 @@ namespace DABMusicDownloader.Classes
             }
         }
 
-        public static async Task<AlbumResponse?> DownloadAsync(string albumId, string quality = "27")
+        public static async Task<AlbumResponse> DownloadAsync(string albumId, string quality = "27")
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("download")
@@ -88,7 +88,7 @@ namespace DABMusicDownloader.Classes
             }
         }
 
-        public static async Task<StreamResponse?> StreamAsync(string albumId, string quality = "27")
+        public static async Task<StreamResponse> StreamAsync(string albumId, string quality = "27")
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("stream")
