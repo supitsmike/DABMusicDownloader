@@ -39,6 +39,7 @@
             settingsToolStripMenuItem = new ToolStripMenuItem();
             dgvSearchResults = new DataGridView();
             pnlDownload = new Panel();
+            lblStatus = new Label();
             prgDownload = new ProgressBar();
             btnDownloadSelected = new Button();
             pnlSearch.SuspendLayout();
@@ -56,15 +57,15 @@
             pnlSearch.Dock = DockStyle.Top;
             pnlSearch.Location = new Point(0, 24);
             pnlSearch.Name = "pnlSearch";
-            pnlSearch.Size = new Size(800, 29);
+            pnlSearch.Size = new Size(784, 29);
             pnlSearch.TabIndex = 2;
             // 
             // lblSearchResults
             // 
-            lblSearchResults.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblSearchResults.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblSearchResults.Location = new Point(500, 3);
             lblSearchResults.Name = "lblSearchResults";
-            lblSearchResults.Size = new Size(297, 23);
+            lblSearchResults.Size = new Size(281, 23);
             lblSearchResults.TabIndex = 3;
             lblSearchResults.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -72,7 +73,7 @@
             // 
             cmbSearchType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSearchType.FormattingEnabled = true;
-            cmbSearchType.Items.AddRange(new object[] { "Track", "Album", "Artist" });
+            cmbSearchType.Items.AddRange(new object[] { "Track", "Album" });
             cmbSearchType.Location = new Point(434, 3);
             cmbSearchType.Name = "cmbSearchType";
             cmbSearchType.Size = new Size(60, 23);
@@ -101,7 +102,7 @@
             menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, settingsToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
-            menuStrip.Size = new Size(800, 24);
+            menuStrip.Size = new Size(784, 24);
             menuStrip.TabIndex = 3;
             menuStrip.Text = "menuStrip1";
             // 
@@ -122,42 +123,55 @@
             // 
             dgvSearchResults.AllowUserToAddRows = false;
             dgvSearchResults.AllowUserToDeleteRows = false;
+            dgvSearchResults.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvSearchResults.BackgroundColor = SystemColors.Control;
             dgvSearchResults.BorderStyle = BorderStyle.None;
             dgvSearchResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvSearchResults.Dock = DockStyle.Top;
             dgvSearchResults.Location = new Point(0, 53);
             dgvSearchResults.MultiSelect = false;
             dgvSearchResults.Name = "dgvSearchResults";
             dgvSearchResults.ReadOnly = true;
+            dgvSearchResults.RowHeadersVisible = false;
             dgvSearchResults.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgvSearchResults.RowTemplate.Height = 100;
             dgvSearchResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvSearchResults.Size = new Size(800, 369);
+            dgvSearchResults.Size = new Size(784, 379);
             dgvSearchResults.TabIndex = 4;
             dgvSearchResults.Scroll += dgvSearchResults_Scroll;
             // 
             // pnlDownload
             // 
+            pnlDownload.Controls.Add(lblStatus);
             pnlDownload.Controls.Add(prgDownload);
             pnlDownload.Controls.Add(btnDownloadSelected);
             pnlDownload.Dock = DockStyle.Bottom;
-            pnlDownload.Location = new Point(0, 422);
+            pnlDownload.Location = new Point(0, 432);
             pnlDownload.Name = "pnlDownload";
-            pnlDownload.Size = new Size(800, 29);
+            pnlDownload.Size = new Size(784, 29);
             pnlDownload.TabIndex = 5;
+            // 
+            // lblStatus
+            // 
+            lblStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblStatus.Location = new Point(3, 3);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(125, 23);
+            lblStatus.TabIndex = 4;
+            lblStatus.Text = "Ready";
+            lblStatus.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // prgDownload
             // 
-            prgDownload.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            prgDownload.Location = new Point(3, 3);
+            prgDownload.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            prgDownload.Location = new Point(134, 3);
             prgDownload.Name = "prgDownload";
-            prgDownload.Size = new Size(250, 23);
+            prgDownload.Size = new Size(521, 23);
             prgDownload.TabIndex = 1;
             // 
             // btnDownloadSelected
             // 
             btnDownloadSelected.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDownloadSelected.Location = new Point(677, 3);
+            btnDownloadSelected.Location = new Point(661, 3);
             btnDownloadSelected.Name = "btnDownloadSelected";
             btnDownloadSelected.Size = new Size(120, 23);
             btnDownloadSelected.TabIndex = 0;
@@ -169,13 +183,14 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 451);
+            ClientSize = new Size(784, 461);
             Controls.Add(pnlDownload);
             Controls.Add(dgvSearchResults);
             Controls.Add(pnlSearch);
             Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
+            MinimumSize = new Size(800, 500);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
@@ -202,5 +217,6 @@
         private Panel pnlDownload;
         private ProgressBar prgDownload;
         private Button btnDownloadSelected;
+        private Label lblStatus;
     }
 }
