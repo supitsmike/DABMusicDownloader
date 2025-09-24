@@ -5,7 +5,7 @@ namespace DABMusicDownloader.Models.Search
     public class Track
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonPropertyName("title")]
         public string Title { get; set; }
