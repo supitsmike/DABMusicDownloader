@@ -5,7 +5,6 @@ using DABMusicDownloader.Models.Stream;
 using DABMusicDownloader.Properties;
 using RestSharp;
 using System.Net;
-using System.Text.Json;
 
 namespace DABMusicDownloader.Classes
 {
@@ -13,24 +12,20 @@ namespace DABMusicDownloader.Classes
     {
         private static readonly string BaseUrl = Settings.Default.BaseURL;
 
-        public static async Task<SearchResponse?> SearchAsync(string query, SearchType type, int limit = 0, int offset = 0)
+        public static async Task<SearchResponse?> SearchAsync(string query, SearchType type, int limit = 20, int offset = 0)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("search")
                 .AddQueryParameter("q", query)
                 .AddQueryParameter("type", type.ToString().ToLower())
-                .AddQueryParameter("limit", limit)
+                .AddQueryParameter("limit", limit) // does not work at this moment
                 .AddQueryParameter("offset", offset)
                 .AddHeader("Accept", "application/json");
 
             try
             {
-                var response = await client.ExecuteAsync(request);
-                if (response.StatusCode == HttpStatusCode.NotFound) return null;
-
-                return string.IsNullOrWhiteSpace(response.Content) == false
-                    ? JsonSerializer.Deserialize<SearchResponse>(response.Content)
-                    : null;
+                var response = await client.ExecuteGetAsync<SearchResponse>(request);
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Data;
             }
             catch (Exception ex)
             {
@@ -47,12 +42,8 @@ namespace DABMusicDownloader.Classes
 
             try
             {
-                var response = await client.ExecuteAsync(request);
-                if (response.StatusCode == HttpStatusCode.NotFound) return null;
-
-                return string.IsNullOrWhiteSpace(response.Content) == false
-                    ? JsonSerializer.Deserialize<AlbumResponse>(response.Content)
-                    : null;
+                var response = await client.ExecuteGetAsync<AlbumResponse>(request);
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Data;
             }
             catch (Exception ex)
             {
@@ -69,12 +60,8 @@ namespace DABMusicDownloader.Classes
 
             try
             {
-                var response = await client.ExecuteAsync(request);
-                if (response.StatusCode == HttpStatusCode.NotFound) return null;
-
-                return string.IsNullOrWhiteSpace(response.Content) == false
-                    ? JsonSerializer.Deserialize<DiscographyResponse>(response.Content)
-                    : null;
+                var response = await client.ExecuteGetAsync<DiscographyResponse>(request);
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Data;
             }
             catch (Exception ex)
             {
@@ -92,12 +79,8 @@ namespace DABMusicDownloader.Classes
 
             try
             {
-                var response = await client.ExecuteAsync(request);
-                if (response.StatusCode == HttpStatusCode.NotFound) return null;
-
-                return string.IsNullOrWhiteSpace(response.Content) == false
-                    ? JsonSerializer.Deserialize<AlbumResponse>(response.Content)
-                    : null;
+                var response = await client.ExecuteGetAsync<AlbumResponse>(request);
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Data;
             }
             catch (Exception ex)
             {
@@ -115,12 +98,8 @@ namespace DABMusicDownloader.Classes
 
             try
             {
-                var response = await client.ExecuteAsync(request);
-                if (response.StatusCode == HttpStatusCode.NotFound) return null;
-
-                return string.IsNullOrWhiteSpace(response.Content) == false
-                    ? JsonSerializer.Deserialize<StreamResponse>(response.Content)
-                    : null;
+                var response = await client.ExecuteGetAsync<StreamResponse>(request);
+                return response.StatusCode == HttpStatusCode.NotFound ? null : response.Data;
             }
             catch (Exception ex)
             {
