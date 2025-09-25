@@ -14,6 +14,7 @@ namespace DABMusicDownloader.Forms
         private string _currentSearchQuery = string.Empty;
         private SearchType _currentSearchType = SearchType.Track;
         private int _currentSearchOffset;
+        private bool _searching;
 
         public MainForm()
         {
@@ -29,7 +30,7 @@ namespace DABMusicDownloader.Forms
 
         private void txtSearchQuery_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Enter) return;
+            if (e.KeyCode != Keys.Enter || _searching) return;
 
             btnSearch.PerformClick();
 
@@ -39,7 +40,7 @@ namespace DABMusicDownloader.Forms
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtSearchQuery.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtSearchQuery.Text) || _searching) return;
 
             _currentSearchQuery = txtSearchQuery.Text;
             _currentSearchType = (SearchType)cmbSearchType.SelectedIndex;
@@ -76,6 +77,9 @@ namespace DABMusicDownloader.Forms
 
         private async Task SearchDABMusic()
         {
+            if (_searching) return;
+
+            _searching = true;
             dgvSearchResults.Enabled = false;
 
             var response = await DABMusicPlayerAPI.SearchAsync(_currentSearchQuery, _currentSearchType, Settings.Default.SearchResultLimit, _currentSearchOffset);
@@ -135,6 +139,7 @@ namespace DABMusicDownloader.Forms
             }
 
             dgvSearchResults.Enabled = true;
+            _searching = false;
         }
 
         private enum StatusType
