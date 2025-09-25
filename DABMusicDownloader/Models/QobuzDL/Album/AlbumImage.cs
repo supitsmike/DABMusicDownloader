@@ -5,19 +5,19 @@ namespace DABMusicDownloader.Models.QobuzDL.Album
     public class AlbumImage
     {
         /// <summary>
-        /// Small thumbnail image
+        /// 230x230 pixel image
         /// </summary>
         [JsonPropertyName("small")]
         public string Small { get; set; } = string.Empty;
 
         /// <summary>
-        /// Standard thumbnail image
+        /// 50x50 pixel image
         /// </summary>
         [JsonPropertyName("thumbnail")]
         public string Thumbnail { get; set; } = string.Empty;
 
         /// <summary>
-        /// Large cover image
+        /// 600x600 pixel image
         /// </summary>
         [JsonPropertyName("large")]
         public string Large { get; set; } = string.Empty;

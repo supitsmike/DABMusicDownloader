@@ -9,15 +9,9 @@ namespace DABMusicDownloader.Models.QobuzDL.Responses
 
         [JsonPropertyName("data")]
         public T? Data { get; set; }
-    }
-
-    public class ErrorResponse
-    {
-        [JsonPropertyName("success")]
-        public bool Success { get; set; }
 
         [JsonPropertyName("error")]
-        public object Error { get; set; } // Can be string or ValidationError[]
+        public object? Error { get; set; } // Can be string or ValidationError[]
     }
 
     public class ValidationError
