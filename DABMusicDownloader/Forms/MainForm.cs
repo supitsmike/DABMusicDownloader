@@ -1,5 +1,7 @@
 using DABMusicDownloader.Classes;
-using DABMusicDownloader.Properties;
+using DABMusicDownloader.Models.QobuzDL;
+using DABMusicDownloader.Models.QobuzDL.Album;
+using DABMusicDownloader.Models.QobuzDL.Track;
 
 namespace DABMusicDownloader.Forms
 {
@@ -8,11 +10,10 @@ namespace DABMusicDownloader.Forms
         private static readonly HttpClient HttpClient = new();
         private static readonly Dictionary<string, Image> AlbumCoverCache = [];
 
-        private List<SearchResponseTrack> _currentTracks = [];
-        private List<SearchResponseAlbum> _currentAlbums = [];
-        private List<SearchResponseAlbumTrack> _currentAlbumTracks = [];
+        private List<SearchResponseItem> _currentItems = [];
+        private List<SearchResponseItem> _currentAlbumItems = [];
         private string _currentSearchQuery = string.Empty;
-        private Models.DABMusic.Search.SearchType _currentSearchType = Models.DABMusic.Search.SearchType.Track;
+        private SearchFilter _currentSearchType = SearchFilter.Albums;
         private int _currentSearchOffset;
         private bool _searching;
 
@@ -43,14 +44,13 @@ namespace DABMusicDownloader.Forms
             if (string.IsNullOrWhiteSpace(txtSearchQuery.Text) || _searching) return;
 
             _currentSearchQuery = txtSearchQuery.Text;
-            _currentSearchType = (Models.DABMusic.Search.SearchType)cmbSearchType.SelectedIndex;
+            _currentSearchType = (SearchFilter)cmbSearchType.SelectedIndex;
             _currentSearchOffset = 0;
 
             UpdateStatus(StatusType.Searching);
 
-            _currentTracks.Clear();
-            _currentAlbums.Clear();
-            await SearchDABMusic();
+            _currentItems.Clear();
+            await SearchQobuzDL();
 
             UpdateStatus(StatusType.Ready);
         }
@@ -58,11 +58,11 @@ namespace DABMusicDownloader.Forms
         private async void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
         {
             if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex < dgvSearchResults.RowCount) return;
-            if (dgvSearchResults.DataSource is List<SearchResponseAlbumTrack>) return;
+            if (_currentAlbumItems.Count != 0) return;
 
             UpdateStatus(StatusType.LoadingMore);
 
-            await SearchDABMusic();
+            await SearchQobuzDL();
 
             UpdateStatus(StatusType.Ready);
         }
@@ -72,81 +72,77 @@ namespace DABMusicDownloader.Forms
             var columnName = dgvSearchResults.Columns[e.ColumnIndex].Name;
             var sortOrder = GetSortOrder(e.ColumnIndex);
 
-            if (dgvSearchResults.DataSource is List<SearchResponseTrack>)
+            if (_currentAlbumItems.Count != 0)
             {
-                var propertyInfo = typeof(SearchResponseTrack).GetProperty(columnName);
+                var propertyInfo = typeof(SearchResponseItem).GetProperty(columnName);
                 if (propertyInfo == null) return;
-                if (propertyInfo.Name == nameof(SearchResponseTrack.AlbumCover)) return;
+                if (propertyInfo.Name == nameof(SearchResponseItem.AlbumCover)) return;
 
-                _currentTracks = sortOrder == SortOrder.Ascending
-                    ? _currentTracks.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
-                    : _currentTracks.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+                _currentAlbumItems = sortOrder == SortOrder.Ascending
+                    ? _currentAlbumItems.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
+                    : _currentAlbumItems.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
 
                 dgvSearchResults.DataSource = null;
-                dgvSearchResults.DataSource = _currentTracks;
-            }
-            else if (dgvSearchResults.DataSource is List<SearchResponseAlbum>)
-            {
-                var propertyInfo = typeof(SearchResponseAlbum).GetProperty(columnName);
-                if (propertyInfo == null) return;
-                if (propertyInfo.Name == nameof(SearchResponseAlbum.AlbumCover)) return;
+                dgvSearchResults.DataSource = _currentAlbumItems;
 
-                _currentAlbums = sortOrder == SortOrder.Ascending
-                    ? _currentAlbums.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
-                    : _currentAlbums.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+                FormatResultsGrid(true);
+            }
+            else if (_currentItems.Count != 0)
+            {
+                var propertyInfo = typeof(SearchResponseItem).GetProperty(columnName);
+                if (propertyInfo == null) return;
+                if (propertyInfo.Name == nameof(SearchResponseItem.AlbumCover)) return;
+
+                _currentItems = sortOrder == SortOrder.Ascending
+                    ? _currentItems.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
+                    : _currentItems.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
 
                 dgvSearchResults.DataSource = null;
-                dgvSearchResults.DataSource = _currentAlbums;
-            }
-            else if (dgvSearchResults.DataSource is List<SearchResponseAlbumTrack>)
-            {
-                var propertyInfo = typeof(SearchResponseAlbumTrack).GetProperty(columnName);
-                if (propertyInfo == null) return;
-                if (propertyInfo.Name == nameof(SearchResponseAlbumTrack.AlbumCover)) return;
+                dgvSearchResults.DataSource = _currentItems;
 
-                _currentAlbumTracks = sortOrder == SortOrder.Ascending
-                    ? _currentAlbumTracks.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
-                    : _currentAlbumTracks.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
-
-                dgvSearchResults.DataSource = null;
-                dgvSearchResults.DataSource = _currentAlbumTracks;
+                FormatResultsGrid();
             }
 
-            FormatResultsGrid();
             dgvSearchResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = sortOrder;
         }
 
         private async void dgvSearchResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) return;
-            if (dgvSearchResults.DataSource is not List<SearchResponseAlbum>) return;
-            if (dgvSearchResults.Rows[e.RowIndex].DataBoundItem is not SearchResponseAlbum searchResponseAlbum) return;
+            if (dgvSearchResults.DataSource is not List<SearchResponseItem>) return;
+            if (dgvSearchResults.Rows[e.RowIndex].DataBoundItem is not SearchResponseItem searchResponseItem) return;
 
-            var albumInfo = await GetAlbumInfo(searchResponseAlbum.AlbumId);
-            if (albumInfo == null) return;
+            var response = await QobuzDLAPI.GetAlbumAsync(searchResponseItem.AlbumId);
+            if (response == null || response.Data == null) return;
 
             dgvSearchResults.DataSource = null;
-            _currentAlbumTracks.Clear();
-            _currentAlbumTracks.AddRange(albumInfo.Tracks.Select(track => new SearchResponseAlbumTrack(track)));
-            dgvSearchResults.DataSource = _currentAlbumTracks;
+            _currentAlbumItems.Clear();
+            _currentAlbumItems.AddRange(response.Data.Tracks.Items.Select(track => new SearchResponseItem(track, searchResponseItem.Album)));
+            dgvSearchResults.DataSource = _currentAlbumItems;
 
-            FormatResultsGrid();
+            FormatResultsGrid(true);
 
             btnBackToAlbums.Visible = true;
-            lblSearchResults.Text = $@"{albumInfo.TrackCount} unique tracks loaded";
+            lblSearchResults.Text = $@"{response.Data.TracksCount} unique tracks loaded";
+        }
+
+        private void dgvSearchResults_MouseDown(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.XButton1) == 0) return;
+
+            btnBackToAlbums.PerformClick();
         }
 
         private void btnBackToAlbums_Click(object sender, EventArgs e)
         {
-            if (dgvSearchResults.DataSource is not List<SearchResponseAlbumTrack>) return;
-
+            _currentAlbumItems.Clear();
             dgvSearchResults.DataSource = null;
-            dgvSearchResults.DataSource = _currentAlbums;
+            dgvSearchResults.DataSource = _currentItems;
 
             FormatResultsGrid();
 
             btnBackToAlbums.Visible = false;
-            lblSearchResults.Text = $@"{_currentAlbums.Count} unique albums loaded";
+            lblSearchResults.Text = $@"{_currentItems.Count} unique albums loaded";
         }
 
         private void btnDownloadSelected_Click(object sender, EventArgs e)
@@ -158,58 +154,30 @@ namespace DABMusicDownloader.Forms
             UpdateStatus(StatusType.Ready);
         }
 
-        private async Task<Models.DABMusic.Album.Album> GetAlbumInfo(string albumId)
-        {
-            if (string.IsNullOrWhiteSpace(albumId)) return null;
-
-            var response = await DABMusicPlayerAPI.DownloadAsync(albumId);
-            if (response == null || !string.IsNullOrWhiteSpace(response.Error))
-            {
-                MessageBox.Show(
-                    string.IsNullOrWhiteSpace(response?.Error) == false
-                        ? response.Error
-                        : @"Something went wrong while executing the API request.",
-                    @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
-
-            return response.Album;
-        }
-
-        private async Task SearchDABMusic()
+        private async Task SearchQobuzDL()
         {
             if (_searching) return;
-
             _searching = true;
             dgvSearchResults.Enabled = false;
 
-            var response = await DABMusicPlayerAPI.SearchAsync(_currentSearchQuery, _currentSearchType, Settings.Default.SearchResultLimit, _currentSearchOffset);
-            if (response == null || !string.IsNullOrWhiteSpace(response.Error))
+            var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
+            if (response == null || response.Data == null)
             {
                 UpdateStatus(StatusType.Ready);
-
-                MessageBox.Show(
-                    string.IsNullOrWhiteSpace(response?.Error) == false
-                        ? response.Error
-                        : @"Something went wrong while executing the API request.",
-                    @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            object dataSource = null;
             dgvSearchResults.DataSource = null;
-            switch (_currentSearchType)
+            if (_currentSearchType == SearchFilter.Albums)
             {
-                case Models.DABMusic.Search.SearchType.Track when response.Tracks.Count != 0:
-                    _currentTracks.AddRange(response.Tracks.Select(track => new SearchResponseTrack(track)));
-                    dataSource = _currentTracks;
-                    break;
-                case Models.DABMusic.Search.SearchType.Album when response.Albums.Count != 0:
-                    _currentAlbums.AddRange(response.Albums.Select(album => new SearchResponseAlbum(album)));
-                    dataSource = _currentAlbums;
-                    break;
+                _currentItems.AddRange(response.Data.Albums.Items.Select(album => new SearchResponseItem(album)));
             }
-            dgvSearchResults.DataSource = dataSource;
+            else if (_currentSearchType == SearchFilter.Tracks)
+            {
+                _currentItems.AddRange(response.Data.Tracks.Items.Select(track => new SearchResponseItem(track)));
+            }
+            dgvSearchResults.DataSource = _currentItems;
+
 
             FormatResultsGrid();
             if (dgvSearchResults.RowCount > 0)
@@ -222,13 +190,13 @@ namespace DABMusicDownloader.Forms
                 }
             }
 
-            if (response.Pagination.HasMore)
+            if (response.Data.Tracks.Offset < response.Data.Tracks.Total)
             {
-                _currentSearchOffset = response.Pagination.Offset + response.Pagination.Returned;
+                _currentSearchOffset = response.Data.Tracks.Offset + response.Data.Tracks.Limit;
                 lblSearchResults.Text = _currentSearchType switch
                 {
-                    Models.DABMusic.Search.SearchType.Track when response.Tracks.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
-                    Models.DABMusic.Search.SearchType.Album when response.Albums.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
+                    SearchFilter.Tracks when response.Data.Tracks.Items.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
+                    SearchFilter.Albums when response.Data.Albums.Items.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
                     _ => string.Empty
                 };
             }
@@ -244,20 +212,37 @@ namespace DABMusicDownloader.Forms
                 : SortOrder.Descending;
         }
 
-        private void FormatResultsGrid()
+        private void FormatResultsGrid(bool albumItems = false)
         {
             var columns = dgvSearchResults.Columns;
             if (columns.Count == 0) return;
 
-            var trackIdColumn = columns[nameof(SearchResponseTrack.TrackId)];
+            var trackColumn = columns[nameof(SearchResponseItem.Track)];
+            if (trackColumn != null) trackColumn.Visible = false;
+
+            var trackIdColumn = columns[nameof(SearchResponseItem.TrackId)];
             if (trackIdColumn != null) trackIdColumn.Visible = false;
 
-            var albumIdColumn = columns[nameof(SearchResponseAlbum.AlbumId)];
+            var albumColumn = columns[nameof(SearchResponseItem.Album)];
+            if (albumColumn != null) albumColumn.Visible = false;
+
+            var albumIdColumn = columns[nameof(SearchResponseItem.AlbumId)];
             if (albumIdColumn != null) albumIdColumn.Visible = false;
 
-            if (columns[nameof(SearchResponseAlbum.AlbumCover)] is DataGridViewImageColumn albumCoverColumn)
+            if (columns[nameof(SearchResponseItem.AlbumCover)] is DataGridViewImageColumn albumCoverColumn)
             {
                 albumCoverColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            }
+
+            if (_currentSearchType == SearchFilter.Tracks || albumItems)
+            {
+                var trackCountColumn = columns[nameof(SearchResponseItem.TrackCount)];
+                if (trackCountColumn != null) trackCountColumn.Visible = false;
+            }
+            else if (_currentSearchType == SearchFilter.Albums)
+            {
+                var titleColumn = columns[nameof(SearchResponseItem.Title)];
+                if (titleColumn != null) titleColumn.Visible = false;
             }
 
             dgvSearchResults.AutoResizeColumns();
@@ -307,16 +292,42 @@ namespace DABMusicDownloader.Forms
             lblStatusSplash.Text = message;
         }
 
-        private class SearchResponseTrack(Models.DABMusic.Search.Track track)
+        private class SearchResponseItem
         {
-            public int TrackId => track.Id;
-            public string AlbumId => track.AlbumId;
+            private enum ItemType { Track, Album }
+            private ItemType Type { get; }
+
+            public readonly QobuzTrack? Track;
+            public readonly QobuzAlbum? Album;
+
+            public SearchResponseItem(QobuzTrack track)
+            {
+                Type = ItemType.Track;
+                Track = track;
+                Album = track.Album;
+            }
+
+            public SearchResponseItem(QobuzAlbum album)
+            {
+                Type = ItemType.Album;
+                Album = album;
+            }
+
+            public SearchResponseItem(QobuzTrack track, QobuzAlbum album)
+            {
+                Type = ItemType.Track;
+                Track = track;
+                Album = album;
+            }
+
+            public int? TrackId => Type == ItemType.Track ? Track?.Id : null;
+            public string AlbumId => Album?.Id;
             public Image AlbumCover
             {
                 get
                 {
-                    var albumId = track.AlbumId;
-                    var albumCover = track.AlbumCover;
+                    var albumId = Album?.Id;
+                    var albumCover = Album?.Image.Small;
                     if (string.IsNullOrWhiteSpace(albumId) || string.IsNullOrWhiteSpace(albumCover)) return null;
 
                     try
@@ -335,81 +346,36 @@ namespace DABMusicDownloader.Forms
                     }
                 }
             }
-            public string Title => track.Title;
-            public string Artist => track.Artist;
-            public string Album => track.AlbumTitle;
-            public string Explicit => track.ParentalWarning == true ? "True" : "False";
-            public string AudioQuality => $"{track.AudioQuality.MaximumBitDepth}bit / {track.AudioQuality.MaximumSamplingRate}kHz";
-            public string HiRes => track.AudioQuality.IsHiRes == true ? "True" : "False";
-        }
-
-        private class SearchResponseAlbum(Models.DABMusic.Search.Album album)
-        {
-            public string AlbumId => album.Id;
-            public Image AlbumCover
+            public string Title => Type == ItemType.Track ? Track?.Title : null;
+            public string AlbumName => Album?.Version == null ? Album?.Title : $"{Album?.Title} ({Album?.Version})";
+            public string Artist => Album?.Artist.Name;
+            public string TrackCount => Type == ItemType.Album ? $"{Album?.TracksCount} tracks" : null;
+            public string Explicit
             {
                 get
                 {
-                    var albumId = album.Id;
-                    var albumCover = album.Cover;
-                    if (string.IsNullOrWhiteSpace(albumId) || string.IsNullOrWhiteSpace(albumCover)) return null;
-
-                    try
-                    {
-                        var image = AlbumCoverCache.GetValueOrDefault(albumId);
-                        if (image != null) return image;
-
-                        using var stream = HttpClient.GetStreamAsync(albumCover).GetAwaiter().GetResult();
-                        AlbumCoverCache[albumId] = Image.FromStream(stream);
-
-                        return AlbumCoverCache.GetValueOrDefault(albumId);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
+                    var parentalWarning = Track?.ParentalWarning ?? Album?.ParentalWarning;
+                    return parentalWarning == true ? "True" : "False";
                 }
             }
-            public string Album => album.Title;
-            public string Artist => album.Artist;
-            public int TrackCount => album.TrackCount;
-            public string AudioQuality => $"{album.AudioQuality.MaximumBitDepth}bit / {album.AudioQuality.MaximumSamplingRate}kHz";
-            public string HiRes => album.AudioQuality.IsHiRes == true ? "True" : "False";
-        }
-
-        private class SearchResponseAlbumTrack(Models.DABMusic.Album.Track track)
-        {
-            public string TrackId => track.Id;
-            public string AlbumId => track.AlbumId;
-            public Image AlbumCover
+            public string ReleaseDate => Album?.ReleaseDateOriginal;
+            public string AudioQuality
             {
                 get
                 {
-                    var albumId = track.AlbumId;
-                    var albumCover = track.AlbumCover;
-                    if (string.IsNullOrWhiteSpace(albumId) || string.IsNullOrWhiteSpace(albumCover)) return null;
-
-                    try
-                    {
-                        var image = AlbumCoverCache.GetValueOrDefault(albumId);
-                        if (image != null) return image;
-
-                        using var stream = HttpClient.GetStreamAsync(albumCover).GetAwaiter().GetResult();
-                        AlbumCoverCache[albumId] = Image.FromStream(stream);
-
-                        return AlbumCoverCache.GetValueOrDefault(albumId);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
+                    var maximumBitDepth = Track?.MaximumBitDepth ?? Album?.MaximumBitDepth;
+                    var maximumSamplingRate = Track?.MaximumSamplingRate ?? Album?.MaximumSamplingRate;
+                    return $"{maximumBitDepth}-bit / {maximumSamplingRate} kHz";
                 }
             }
-            public string Title => track.Title;
-            public string Artist => track.Artist;
-            public string Album => track.AlbumTitle;
-            public string AudioQuality => $"{track.AudioQuality.MaximumBitDepth}bit / {track.AudioQuality.MaximumSamplingRate}kHz";
-            public string HiRes => track.AudioQuality.IsHiRes == true ? "True" : "False";
+            public string HiRes
+            {
+                get
+                {
+                    var hiRes = Track?.HiRes ?? Album?.HiRes;
+                    return hiRes == true ? "True" : "False";
+                }
+            }
         }
     }
 }

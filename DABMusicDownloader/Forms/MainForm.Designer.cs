@@ -154,6 +154,7 @@
             dgvSearchResults.CellDoubleClick += dgvSearchResults_CellDoubleClick;
             dgvSearchResults.ColumnHeaderMouseClick += dgvSearchResults_ColumnHeaderMouseClick;
             dgvSearchResults.Scroll += dgvSearchResults_Scroll;
+            dgvSearchResults.MouseDown += dgvSearchResults_MouseDown;
             // 
             // pnlDownload
             // 
