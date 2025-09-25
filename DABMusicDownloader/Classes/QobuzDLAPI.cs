@@ -27,7 +27,7 @@ namespace DABMusicDownloader.Classes
                 }
                 else
                 {
-                    errorMessage = response.Error as string;
+                    errorMessage = Convert.ToString(response.Error);
                 }
 
                 MessageBox.Show(errorMessage, @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -74,6 +74,28 @@ namespace DABMusicDownloader.Classes
             catch (Exception ex)
             {
                 throw new Exception($"An unexpected error occurred in GetAlbumAsync: {ex.Message}", ex);
+            }
+        }
+
+        public static async Task<DownloadResponse> DownloadMusicAsync(int trackId, int quality)
+        {
+            var client = new RestClient(BaseUrl);
+            var request = new RestRequest("download-music")
+                .AddQueryParameter("track_id", trackId)
+                .AddQueryParameter("quality", quality)
+                .AddHeader("Accept", "application/json");
+
+            try
+            {
+                var response = await client.ExecuteGetAsync<DownloadResponse>(request);
+                var result = response.StatusCode == HttpStatusCode.NotFound ? null : response.Data;
+
+                CheckForErrors(result);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An unexpected error occurred in DownloadMusicAsync: {ex.Message}", ex);
             }
         }
     }
