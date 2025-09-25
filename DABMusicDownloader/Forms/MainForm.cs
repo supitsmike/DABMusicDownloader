@@ -8,9 +8,9 @@ namespace DABMusicDownloader.Forms
     {
         private static readonly HttpClient HttpClient = new();
         private static readonly Dictionary<string, Image> AlbumCoverCache = [];
-        private readonly List<SearchResponseTrack> _currentTracks = [];
-        private readonly List<SearchResponseAlbum> _currentAlbums = [];
 
+        private List<SearchResponseTrack> _currentTracks = [];
+        private List<SearchResponseAlbum> _currentAlbums = [];
         private string _currentSearchQuery = string.Empty;
         private SearchType _currentSearchType = SearchType.Track;
         private int _currentSearchOffset;
@@ -58,12 +58,48 @@ namespace DABMusicDownloader.Forms
         private async void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
         {
             if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex < dgvSearchResults.RowCount) return;
-            
+
             UpdateStatus(StatusType.LoadingMore);
 
             await SearchDABMusic();
 
             UpdateStatus(StatusType.Ready);
+        }
+
+        private void dgvSearchResults_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var columnName = dgvSearchResults.Columns[e.ColumnIndex].Name;
+            var sortOrder = GetSortOrder(e.ColumnIndex);
+
+            if (dgvSearchResults.DataSource is List<SearchResponseTrack>)
+            {
+                var propertyInfo = typeof(SearchResponseTrack).GetProperty(columnName);
+                if (propertyInfo == null) return;
+                if (propertyInfo.Name == nameof(SearchResponseTrack.AlbumCover)) return;
+
+                _currentTracks = sortOrder == SortOrder.Ascending
+                    ? _currentTracks.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
+                    : _currentTracks.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+
+                dgvSearchResults.DataSource = null;
+                dgvSearchResults.DataSource = _currentTracks;
+            }
+            else if (dgvSearchResults.DataSource is List<SearchResponseAlbum>)
+            {
+                var propertyInfo = typeof(SearchResponseAlbum).GetProperty(columnName);
+                if (propertyInfo == null) return;
+                if (propertyInfo.Name == nameof(SearchResponseAlbum.AlbumCover)) return;
+
+                _currentAlbums = sortOrder == SortOrder.Ascending
+                    ? _currentAlbums.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
+                    : _currentAlbums.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+
+                dgvSearchResults.DataSource = null;
+                dgvSearchResults.DataSource = _currentAlbums;
+            }
+
+            FormatResultsGrid();
+            dgvSearchResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = sortOrder;
         }
 
         private void btnDownloadSelected_Click(object sender, EventArgs e)
@@ -108,21 +144,7 @@ namespace DABMusicDownloader.Forms
                     break;
             }
 
-            var columns = dgvSearchResults.Columns;
-            if (columns.Count == 0) return;
-
-            var trackIdColumn = columns[nameof(SearchResponseTrack.TrackId)];
-            if (trackIdColumn != null) trackIdColumn.Visible = false;
-
-            var albumIdColumn = columns[nameof(SearchResponseAlbum.AlbumId)];
-            if (albumIdColumn != null) albumIdColumn.Visible = false;
-
-            if (columns[nameof(SearchResponseAlbum.AlbumCover)] is DataGridViewImageColumn albumCoverColumn)
-            {
-                albumCoverColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
-            }
-
-            dgvSearchResults.AutoResizeColumns();
+            FormatResultsGrid();
             if (dgvSearchResults.RowCount > 0)
             {
                 var rowIndex = _currentSearchOffset != 0 ? _currentSearchOffset - 1 : 0;
@@ -141,6 +163,32 @@ namespace DABMusicDownloader.Forms
 
             dgvSearchResults.Enabled = true;
             _searching = false;
+        }
+
+        private SortOrder GetSortOrder(int columnIndex)
+        {
+            return dgvSearchResults.Columns[columnIndex].HeaderCell.SortGlyphDirection is SortOrder.None or SortOrder.Descending
+                ? SortOrder.Ascending
+                : SortOrder.Descending;
+        }
+
+        private void FormatResultsGrid()
+        {
+            var columns = dgvSearchResults.Columns;
+            if (columns.Count == 0) return;
+
+            var trackIdColumn = columns[nameof(SearchResponseTrack.TrackId)];
+            if (trackIdColumn != null) trackIdColumn.Visible = false;
+
+            var albumIdColumn = columns[nameof(SearchResponseAlbum.AlbumId)];
+            if (albumIdColumn != null) albumIdColumn.Visible = false;
+
+            if (columns[nameof(SearchResponseAlbum.AlbumCover)] is DataGridViewImageColumn albumCoverColumn)
+            {
+                albumCoverColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            }
+
+            dgvSearchResults.AutoResizeColumns();
         }
 
         private enum StatusType

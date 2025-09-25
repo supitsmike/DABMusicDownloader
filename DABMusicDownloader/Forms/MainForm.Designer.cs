@@ -138,6 +138,7 @@
             dgvSearchResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvSearchResults.Size = new Size(784, 379);
             dgvSearchResults.TabIndex = 4;
+            dgvSearchResults.ColumnHeaderMouseClick += dgvSearchResults_ColumnHeaderMouseClick;
             dgvSearchResults.Scroll += dgvSearchResults_Scroll;
             // 
             // pnlDownload
