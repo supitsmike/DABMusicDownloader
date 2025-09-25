@@ -55,7 +55,7 @@ namespace DABMusicDownloader.Classes
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("discography")
-                .AddQueryParameter("artistId ", artistId)
+                .AddQueryParameter("artistId", artistId)
                 .AddHeader("Accept", "application/json");
 
             try
@@ -73,8 +73,8 @@ namespace DABMusicDownloader.Classes
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("download")
-                .AddQueryParameter("albumId ", albumId)
-                .AddQueryParameter("quality ", quality)
+                .AddQueryParameter("albumId", albumId)
+                .AddQueryParameter("quality", quality)
                 .AddHeader("Accept", "application/json");
 
             try
@@ -92,8 +92,8 @@ namespace DABMusicDownloader.Classes
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("stream")
-                .AddQueryParameter("albumId ", albumId)
-                .AddQueryParameter("quality ", quality)
+                .AddQueryParameter("albumId", albumId)
+                .AddQueryParameter("quality", quality)
                 .AddHeader("Accept", "application/json");
 
             try
