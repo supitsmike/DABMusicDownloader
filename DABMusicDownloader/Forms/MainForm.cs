@@ -117,6 +117,39 @@ namespace DABMusicDownloader.Forms
             dgvSearchResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = sortOrder;
         }
 
+        private async void dgvSearchResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1) return;
+            if (dgvSearchResults.DataSource is not List<SearchResponseAlbum>) return;
+            if (dgvSearchResults.Rows[e.RowIndex].DataBoundItem is not SearchResponseAlbum searchResponseAlbum) return;
+
+            var albumInfo = await GetAlbumInfo(searchResponseAlbum.AlbumId);
+            if (albumInfo == null) return;
+
+            dgvSearchResults.DataSource = null;
+            _currentAlbumTracks.Clear();
+            _currentAlbumTracks.AddRange(albumInfo.Tracks.Select(track => new SearchResponseAlbumTrack(track)));
+            dgvSearchResults.DataSource = _currentAlbumTracks;
+
+            FormatResultsGrid();
+
+            btnBackToAlbums.Visible = true;
+            lblSearchResults.Text = $@"{albumInfo.TrackCount} unique tracks loaded";
+        }
+
+        private void btnBackToAlbums_Click(object sender, EventArgs e)
+        {
+            if (dgvSearchResults.DataSource is not List<SearchResponseAlbumTrack>) return;
+
+            dgvSearchResults.DataSource = null;
+            dgvSearchResults.DataSource = _currentAlbums;
+
+            FormatResultsGrid();
+
+            btnBackToAlbums.Visible = false;
+            lblSearchResults.Text = $@"{_currentAlbums.Count} unique albums loaded";
+        }
+
         private void btnDownloadSelected_Click(object sender, EventArgs e)
         {
             UpdateStatus(StatusType.Downloading);
@@ -124,6 +157,24 @@ namespace DABMusicDownloader.Forms
 
 
             UpdateStatus(StatusType.Ready);
+        }
+
+        private async Task<Models.Album.Album> GetAlbumInfo(string albumId)
+        {
+            if (string.IsNullOrWhiteSpace(albumId)) return null;
+
+            var response = await DABMusicPlayerAPI.DownloadAsync(albumId);
+            if (response == null || !string.IsNullOrWhiteSpace(response.Error))
+            {
+                MessageBox.Show(
+                    string.IsNullOrWhiteSpace(response?.Error) == false
+                        ? response.Error
+                        : @"Something went wrong while executing the API request.",
+                    @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+
+            return response.Album;
         }
 
         private async Task SearchDABMusic()

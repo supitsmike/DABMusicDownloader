@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnlSearch = new Panel();
+            btnBackToAlbums = new Button();
             lblSearchResults = new Label();
             cmbSearchType = new ComboBox();
             txtSearchQuery = new TextBox();
@@ -51,6 +52,7 @@
             // 
             // pnlSearch
             // 
+            pnlSearch.Controls.Add(btnBackToAlbums);
             pnlSearch.Controls.Add(lblSearchResults);
             pnlSearch.Controls.Add(cmbSearchType);
             pnlSearch.Controls.Add(txtSearchQuery);
@@ -61,12 +63,23 @@
             pnlSearch.Size = new Size(784, 29);
             pnlSearch.TabIndex = 2;
             // 
+            // btnBackToAlbums
+            // 
+            btnBackToAlbums.Location = new Point(500, 3);
+            btnBackToAlbums.Name = "btnBackToAlbums";
+            btnBackToAlbums.Size = new Size(50, 23);
+            btnBackToAlbums.TabIndex = 4;
+            btnBackToAlbums.Text = "Back";
+            btnBackToAlbums.UseVisualStyleBackColor = true;
+            btnBackToAlbums.Visible = false;
+            btnBackToAlbums.Click += btnBackToAlbums_Click;
+            // 
             // lblSearchResults
             // 
             lblSearchResults.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblSearchResults.Location = new Point(500, 3);
+            lblSearchResults.Location = new Point(556, 3);
             lblSearchResults.Name = "lblSearchResults";
-            lblSearchResults.Size = new Size(281, 23);
+            lblSearchResults.Size = new Size(225, 23);
             lblSearchResults.TabIndex = 3;
             lblSearchResults.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -138,6 +151,7 @@
             dgvSearchResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvSearchResults.Size = new Size(784, 379);
             dgvSearchResults.TabIndex = 4;
+            dgvSearchResults.CellDoubleClick += dgvSearchResults_CellDoubleClick;
             dgvSearchResults.ColumnHeaderMouseClick += dgvSearchResults_ColumnHeaderMouseClick;
             dgvSearchResults.Scroll += dgvSearchResults_Scroll;
             // 
@@ -233,5 +247,6 @@
         private Button btnDownloadSelected;
         private Label lblStatusMessage;
         private Label lblStatusSplash;
+        private Button btnBackToAlbums;
     }
 }
