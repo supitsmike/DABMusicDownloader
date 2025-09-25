@@ -188,6 +188,7 @@
             lblStatusSplash.Size = new Size(784, 379);
             lblStatusSplash.TabIndex = 0;
             lblStatusSplash.TextAlign = ContentAlignment.MiddleCenter;
+            lblStatusSplash.UseWaitCursor = true;
             lblStatusSplash.Visible = false;
             // 
             // MainForm
