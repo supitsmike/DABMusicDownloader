@@ -85,7 +85,7 @@
             txtSearchQuery.Location = new Point(84, 3);
             txtSearchQuery.Name = "txtSearchQuery";
             txtSearchQuery.Size = new Size(344, 23);
-            txtSearchQuery.TabIndex = 1;
+            txtSearchQuery.TabIndex = 0;
             txtSearchQuery.KeyDown += txtSearchQuery_KeyDown;
             // 
             // btnSearch
@@ -93,7 +93,7 @@
             btnSearch.Location = new Point(3, 3);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(75, 23);
-            btnSearch.TabIndex = 0;
+            btnSearch.TabIndex = 1;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = true;
             btnSearch.Click += btnSearch_Click;
