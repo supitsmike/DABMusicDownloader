@@ -6,6 +6,15 @@ namespace DABMusicDownloader.Forms
 {
     public partial class MainForm : Form
     {
+        private static readonly HttpClient HttpClient = new();
+        private static readonly Dictionary<string, Image> AlbumCoverCache = [];
+        private readonly List<SearchResponseTrack> _currentTracks = [];
+        private readonly List<SearchResponseAlbum> _currentAlbums = [];
+
+        private string _currentSearchQuery = string.Empty;
+        private SearchType _currentSearchType = SearchType.Track;
+        private int _currentSearchOffset;
+
         public MainForm()
         {
             InitializeComponent();
@@ -28,14 +37,39 @@ namespace DABMusicDownloader.Forms
             e.SuppressKeyPress = true;
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
+            btnSearch.Enabled = false;
+            lblStatus.Text = @"Searching...";
 
+            _currentSearchQuery = txtSearchQuery.Text;
+            _currentSearchType = (SearchType)cmbSearchType.SelectedIndex;
+            _currentSearchOffset = 0;
+
+            lblStatus.Text = @"Ready";
+            btnSearch.Enabled = true;
         }
 
-        private void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
+        private async void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
         {
-            if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex >= dgvSearchResults.RowCount)
+            if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex < dgvSearchResults.RowCount) return;
+
+            btnSearch.Enabled = false;
+            lblStatus.Text = @"Loading More...";
+
+            lblStatus.Text = @"Ready";
+            btnSearch.Enabled = true;
+        }
+
+        private void btnDownloadSelected_Click(object sender, EventArgs e)
+        {
+            btnDownloadSelected.Enabled = false;
+            lblStatus.Text = @"Downloading...";
+
+
+
+            lblStatus.Text = @"Ready";
+            btnDownloadSelected.Enabled = true;
         }
         
         private class SearchResponseTrack(Track track)
