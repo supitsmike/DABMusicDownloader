@@ -1,5 +1,4 @@
 using DABMusicDownloader.Classes;
-using DABMusicDownloader.Models.Search;
 using DABMusicDownloader.Properties;
 
 namespace DABMusicDownloader.Forms
@@ -13,7 +12,7 @@ namespace DABMusicDownloader.Forms
         private List<SearchResponseAlbum> _currentAlbums = [];
         private List<SearchResponseAlbumTrack> _currentAlbumTracks = [];
         private string _currentSearchQuery = string.Empty;
-        private SearchType _currentSearchType = SearchType.Track;
+        private Models.Search.SearchType _currentSearchType = Models.Search.SearchType.Track;
         private int _currentSearchOffset;
         private bool _searching;
 
@@ -44,7 +43,7 @@ namespace DABMusicDownloader.Forms
             if (string.IsNullOrWhiteSpace(txtSearchQuery.Text) || _searching) return;
 
             _currentSearchQuery = txtSearchQuery.Text;
-            _currentSearchType = (SearchType)cmbSearchType.SelectedIndex;
+            _currentSearchType = (Models.Search.SearchType)cmbSearchType.SelectedIndex;
             _currentSearchOffset = 0;
 
             UpdateStatus(StatusType.Searching);
@@ -201,11 +200,11 @@ namespace DABMusicDownloader.Forms
             dgvSearchResults.DataSource = null;
             switch (_currentSearchType)
             {
-                case SearchType.Track when response.Tracks.Count != 0:
+                case Models.Search.SearchType.Track when response.Tracks.Count != 0:
                     _currentTracks.AddRange(response.Tracks.Select(track => new SearchResponseTrack(track)));
                     dataSource = _currentTracks;
                     break;
-                case SearchType.Album when response.Albums.Count != 0:
+                case Models.Search.SearchType.Album when response.Albums.Count != 0:
                     _currentAlbums.AddRange(response.Albums.Select(album => new SearchResponseAlbum(album)));
                     dataSource = _currentAlbums;
                     break;
@@ -228,8 +227,8 @@ namespace DABMusicDownloader.Forms
                 _currentSearchOffset = response.Pagination.Offset + response.Pagination.Returned;
                 lblSearchResults.Text = _currentSearchType switch
                 {
-                    SearchType.Track when response.Tracks.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
-                    SearchType.Album when response.Albums.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
+                    Models.Search.SearchType.Track when response.Tracks.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
+                    Models.Search.SearchType.Album when response.Albums.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
                     _ => string.Empty
                 };
             }
