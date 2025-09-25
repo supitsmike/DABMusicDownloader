@@ -38,6 +38,8 @@
             lblDownloadLocation = new Label();
             nudSearchResultLimit = new NumericUpDown();
             lblSearchResultLimit = new Label();
+            cmbDownloadQuality = new ComboBox();
+            lblDownloadQuality = new Label();
             ((System.ComponentModel.ISupportInitialize)nudConcurrentDownloads).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudSearchResultLimit).BeginInit();
             SuspendLayout();
@@ -61,7 +63,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnSave.Location = new Point(171, 128);
+            btnSave.Location = new Point(171, 157);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 2;
@@ -72,7 +74,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnCancel.Location = new Point(90, 128);
+            btnCancel.Location = new Point(90, 157);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 3;
@@ -83,7 +85,7 @@
             // lblConcurrentDownloads
             // 
             lblConcurrentDownloads.AutoSize = true;
-            lblConcurrentDownloads.Location = new Point(12, 102);
+            lblConcurrentDownloads.Location = new Point(12, 131);
             lblConcurrentDownloads.Name = "lblConcurrentDownloads";
             lblConcurrentDownloads.Size = new Size(132, 15);
             lblConcurrentDownloads.TabIndex = 4;
@@ -91,7 +93,7 @@
             // 
             // nudConcurrentDownloads
             // 
-            nudConcurrentDownloads.Location = new Point(150, 99);
+            nudConcurrentDownloads.Location = new Point(150, 128);
             nudConcurrentDownloads.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
             nudConcurrentDownloads.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudConcurrentDownloads.Name = "nudConcurrentDownloads";
@@ -103,8 +105,10 @@
             // 
             txtDownloadLocation.Location = new Point(150, 70);
             txtDownloadLocation.Name = "txtDownloadLocation";
+            txtDownloadLocation.ReadOnly = true;
             txtDownloadLocation.Size = new Size(175, 23);
             txtDownloadLocation.TabIndex = 10;
+            txtDownloadLocation.Click += txtDownloadLocation_Click;
             // 
             // lblDownloadLocation
             // 
@@ -133,11 +137,31 @@
             lblSearchResultLimit.TabIndex = 11;
             lblSearchResultLimit.Text = "Search Result Limit:";
             // 
+            // cmbDownloadQuality
+            // 
+            cmbDownloadQuality.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDownloadQuality.FormattingEnabled = true;
+            cmbDownloadQuality.Location = new Point(150, 99);
+            cmbDownloadQuality.Name = "cmbDownloadQuality";
+            cmbDownloadQuality.Size = new Size(175, 23);
+            cmbDownloadQuality.TabIndex = 13;
+            // 
+            // lblDownloadQuality
+            // 
+            lblDownloadQuality.AutoSize = true;
+            lblDownloadQuality.Location = new Point(39, 102);
+            lblDownloadQuality.Name = "lblDownloadQuality";
+            lblDownloadQuality.Size = new Size(105, 15);
+            lblDownloadQuality.TabIndex = 14;
+            lblDownloadQuality.Text = "Download Quality:";
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(337, 163);
+            ClientSize = new Size(337, 192);
+            Controls.Add(lblDownloadQuality);
+            Controls.Add(cmbDownloadQuality);
             Controls.Add(nudSearchResultLimit);
             Controls.Add(lblSearchResultLimit);
             Controls.Add(txtDownloadLocation);
@@ -171,5 +195,7 @@
         private Label lblDownloadLocation;
         private NumericUpDown nudSearchResultLimit;
         private Label lblSearchResultLimit;
+        private ComboBox cmbDownloadQuality;
+        private Label lblDownloadQuality;
     }
 }

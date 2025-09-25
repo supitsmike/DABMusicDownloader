@@ -14,5 +14,8 @@
     <Setting Name="SearchResultLimit" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="DownloadQuality" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">27</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

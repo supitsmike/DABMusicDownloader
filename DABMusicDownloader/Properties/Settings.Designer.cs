@@ -70,5 +70,17 @@ namespace DABMusicDownloader.Properties {
                 this["SearchResultLimit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("27")]
+        public int DownloadQuality {
+            get {
+                return ((int)(this["DownloadQuality"]));
+            }
+            set {
+                this["DownloadQuality"] = value;
+            }
+        }
     }
 }
