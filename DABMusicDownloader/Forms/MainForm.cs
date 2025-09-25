@@ -157,24 +157,26 @@ namespace DABMusicDownloader.Forms
             {
                 case StatusType.Searching:
                     btnSearch.Enabled = false;
+                    btnDownloadSelected.Enabled = false;
                     lblStatusSplash.Visible = true;
                     message = @"Searching...";
                     break;
                 case StatusType.LoadingMore:
                     btnSearch.Enabled = false;
+                    btnDownloadSelected.Enabled = false;
                     lblStatusSplash.Visible = true;
                     message = @"Loading More...";
                     break;
                 case StatusType.Downloading:
-                    btnDownloadSelected.Enabled = false;
                     btnSearch.Enabled = false;
+                    btnDownloadSelected.Enabled = false;
                     lblStatusSplash.Visible = true;
                     message = @"Downloading...";
                     break;
                 case StatusType.Ready:
                 default:
-                    btnDownloadSelected.Enabled = true;
                     btnSearch.Enabled = true;
+                    btnDownloadSelected.Enabled = true;
                     lblStatusSplash.Visible = false;
                     message = @"Ready";
                     break;
