@@ -129,6 +129,7 @@ namespace DABMusicDownloader.Forms
                 if (rowIndex >= 0 && rowIndex < dgvSearchResults.RowCount)
                 {
                     dgvSearchResults.FirstDisplayedScrollingRowIndex = rowIndex;
+                    dgvSearchResults.PerformLayout();
                 }
             }
 
