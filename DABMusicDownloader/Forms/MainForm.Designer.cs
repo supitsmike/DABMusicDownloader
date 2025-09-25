@@ -87,7 +87,7 @@
             // 
             cmbSearchType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSearchType.FormattingEnabled = true;
-            cmbSearchType.Items.AddRange(new object[] { "Track", "Album" });
+            cmbSearchType.Items.AddRange(new object[] { "Albums", "Tracks" });
             cmbSearchType.Location = new Point(434, 3);
             cmbSearchType.Name = "cmbSearchType";
             cmbSearchType.Size = new Size(60, 23);
