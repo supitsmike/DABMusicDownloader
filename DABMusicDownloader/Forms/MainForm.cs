@@ -11,6 +11,7 @@ namespace DABMusicDownloader.Forms
 
         private List<SearchResponseTrack> _currentTracks = [];
         private List<SearchResponseAlbum> _currentAlbums = [];
+        private List<SearchResponseAlbumTrack> _currentAlbumTracks = [];
         private string _currentSearchQuery = string.Empty;
         private SearchType _currentSearchType = SearchType.Track;
         private int _currentSearchOffset;
@@ -58,6 +59,7 @@ namespace DABMusicDownloader.Forms
         private async void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
         {
             if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex < dgvSearchResults.RowCount) return;
+            if (dgvSearchResults.DataSource is List<SearchResponseAlbumTrack>) return;
 
             UpdateStatus(StatusType.LoadingMore);
 
@@ -96,6 +98,19 @@ namespace DABMusicDownloader.Forms
 
                 dgvSearchResults.DataSource = null;
                 dgvSearchResults.DataSource = _currentAlbums;
+            }
+            else if (dgvSearchResults.DataSource is List<SearchResponseAlbumTrack>)
+            {
+                var propertyInfo = typeof(SearchResponseAlbumTrack).GetProperty(columnName);
+                if (propertyInfo == null) return;
+                if (propertyInfo.Name == nameof(SearchResponseAlbumTrack.AlbumCover)) return;
+
+                _currentAlbumTracks = sortOrder == SortOrder.Ascending
+                    ? _currentAlbumTracks.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
+                    : _currentAlbumTracks.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+
+                dgvSearchResults.DataSource = null;
+                dgvSearchResults.DataSource = _currentAlbumTracks;
             }
 
             FormatResultsGrid();
