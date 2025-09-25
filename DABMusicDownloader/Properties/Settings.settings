@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BaseURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://dabmusic.xyz/api</Value>
+      <Value Profile="(Default)">https://us.qqdl.site/api</Value>
     </Setting>
     <Setting Name="DownloadLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -12,7 +12,7 @@
       <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="SearchResultLimit" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>
 </SettingsFile>
