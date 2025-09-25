@@ -22,6 +22,58 @@ namespace DABMusicDownloader.Forms
             cmbSearchType.SelectedIndex = 0;
         }
 
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().ShowDialog(this);
+        }
+
+        private void txtSearchQuery_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter) return;
+
+            btnSearch.PerformClick();
+
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+        }
+
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearchQuery.Text)) return;
+
+            _currentSearchQuery = txtSearchQuery.Text;
+            _currentSearchType = (SearchType)cmbSearchType.SelectedIndex;
+            _currentSearchOffset = 0;
+
+            UpdateStatus(StatusType.Searching);
+
+            _currentTracks.Clear();
+            _currentAlbums.Clear();
+            await SearchDABMusic();
+
+            UpdateStatus(StatusType.Ready);
+        }
+
+        private async void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex < dgvSearchResults.RowCount) return;
+            
+            UpdateStatus(StatusType.LoadingMore);
+
+            await SearchDABMusic();
+
+            UpdateStatus(StatusType.Ready);
+        }
+
+        private void btnDownloadSelected_Click(object sender, EventArgs e)
+        {
+            UpdateStatus(StatusType.Downloading);
+
+
+
+            UpdateStatus(StatusType.Ready);
+        }
+
         private async Task SearchDABMusic()
         {
             dgvSearchResults.Enabled = false;
@@ -29,8 +81,7 @@ namespace DABMusicDownloader.Forms
             var response = await DABMusicPlayerAPI.SearchAsync(_currentSearchQuery, _currentSearchType, Settings.Default.SearchResultLimit, _currentSearchOffset);
             if (response == null || !string.IsNullOrWhiteSpace(response.Error))
             {
-                lblStatus.Text = @"Ready";
-                btnSearch.Enabled = true;
+                UpdateStatus(StatusType.Ready);
 
                 MessageBox.Show(
                     string.IsNullOrWhiteSpace(response?.Error) == false
@@ -86,62 +137,48 @@ namespace DABMusicDownloader.Forms
             dgvSearchResults.Enabled = true;
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private enum StatusType
         {
-            new SettingsForm().ShowDialog(this);
+            Ready,
+            Searching,
+            LoadingMore,
+            Downloading
         }
 
-        private void txtSearchQuery_KeyDown(object sender, KeyEventArgs e)
+        private void UpdateStatus(StatusType statusType)
         {
-            if (e.KeyCode != Keys.Enter) return;
+            string message;
+            switch (statusType)
+            {
+                case StatusType.Searching:
+                    btnSearch.Enabled = false;
+                    lblStatusSplash.Visible = true;
+                    message = @"Searching...";
+                    break;
+                case StatusType.LoadingMore:
+                    btnSearch.Enabled = false;
+                    lblStatusSplash.Visible = true;
+                    message = @"Loading More...";
+                    break;
+                case StatusType.Downloading:
+                    btnDownloadSelected.Enabled = false;
+                    btnSearch.Enabled = false;
+                    lblStatusSplash.Visible = true;
+                    message = @"Downloading...";
+                    break;
+                case StatusType.Ready:
+                default:
+                    btnDownloadSelected.Enabled = true;
+                    btnSearch.Enabled = true;
+                    lblStatusSplash.Visible = false;
+                    message = @"Ready";
+                    break;
+            }
 
-            btnSearch.PerformClick();
-
-            e.Handled = true;
-            e.SuppressKeyPress = true;
+            lblStatusMessage.Text = message;
+            lblStatusSplash.Text = message;
         }
 
-        private async void btnSearch_Click(object sender, EventArgs e)
-        {
-            btnSearch.Enabled = false;
-            lblStatus.Text = @"Searching...";
-
-            _currentSearchQuery = txtSearchQuery.Text;
-            _currentSearchType = (SearchType)cmbSearchType.SelectedIndex;
-            _currentSearchOffset = 0;
-
-            _currentTracks.Clear();
-            _currentAlbums.Clear();
-            await SearchDABMusic();
-
-            lblStatus.Text = @"Ready";
-            btnSearch.Enabled = true;
-        }
-
-        private async void dgvSearchResults_Scroll(object sender, ScrollEventArgs e)
-        {
-            if (dgvSearchResults.DisplayedRowCount(false) + dgvSearchResults.FirstDisplayedScrollingRowIndex < dgvSearchResults.RowCount) return;
-
-            btnSearch.Enabled = false;
-            lblStatus.Text = @"Loading More...";
-
-            await SearchDABMusic();
-            
-            lblStatus.Text = @"Ready";
-            btnSearch.Enabled = true;
-        }
-
-        private void btnDownloadSelected_Click(object sender, EventArgs e)
-        {
-            btnDownloadSelected.Enabled = false;
-            lblStatus.Text = @"Downloading...";
-
-
-
-            lblStatus.Text = @"Ready";
-            btnDownloadSelected.Enabled = true;
-        }
-        
         private class SearchResponseTrack(Track track)
         {
             public int TrackId => track.Id;

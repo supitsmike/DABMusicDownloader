@@ -39,9 +39,10 @@
             settingsToolStripMenuItem = new ToolStripMenuItem();
             dgvSearchResults = new DataGridView();
             pnlDownload = new Panel();
-            lblStatus = new Label();
+            lblStatusMessage = new Label();
             prgDownload = new ProgressBar();
             btnDownloadSelected = new Button();
+            lblStatusSplash = new Label();
             pnlSearch.SuspendLayout();
             menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSearchResults).BeginInit();
@@ -141,7 +142,7 @@
             // 
             // pnlDownload
             // 
-            pnlDownload.Controls.Add(lblStatus);
+            pnlDownload.Controls.Add(lblStatusMessage);
             pnlDownload.Controls.Add(prgDownload);
             pnlDownload.Controls.Add(btnDownloadSelected);
             pnlDownload.Dock = DockStyle.Bottom;
@@ -150,15 +151,15 @@
             pnlDownload.Size = new Size(784, 29);
             pnlDownload.TabIndex = 5;
             // 
-            // lblStatus
+            // lblStatusMessage
             // 
-            lblStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            lblStatus.Location = new Point(3, 3);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(125, 23);
-            lblStatus.TabIndex = 4;
-            lblStatus.Text = "Ready";
-            lblStatus.TextAlign = ContentAlignment.MiddleLeft;
+            lblStatusMessage.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblStatusMessage.Location = new Point(3, 3);
+            lblStatusMessage.Name = "lblStatusMessage";
+            lblStatusMessage.Size = new Size(125, 23);
+            lblStatusMessage.TabIndex = 4;
+            lblStatusMessage.Text = "Ready";
+            lblStatusMessage.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // prgDownload
             // 
@@ -179,11 +180,22 @@
             btnDownloadSelected.UseVisualStyleBackColor = true;
             btnDownloadSelected.Click += btnDownloadSelected_Click;
             // 
+            // lblStatusSplash
+            // 
+            lblStatusSplash.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblStatusSplash.Location = new Point(0, 53);
+            lblStatusSplash.Name = "lblStatusSplash";
+            lblStatusSplash.Size = new Size(784, 379);
+            lblStatusSplash.TabIndex = 0;
+            lblStatusSplash.TextAlign = ContentAlignment.MiddleCenter;
+            lblStatusSplash.Visible = false;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 461);
+            Controls.Add(lblStatusSplash);
             Controls.Add(pnlDownload);
             Controls.Add(dgvSearchResults);
             Controls.Add(pnlSearch);
@@ -217,6 +229,7 @@
         private Panel pnlDownload;
         private ProgressBar prgDownload;
         private Button btnDownloadSelected;
-        private Label lblStatus;
+        private Label lblStatusMessage;
+        private Label lblStatusSplash;
     }
 }
