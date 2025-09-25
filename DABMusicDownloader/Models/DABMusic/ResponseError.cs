@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DABMusicDownloader.Models
+namespace DABMusicDownloader.Models.DABMusic
 {
     public class ResponseError
     {

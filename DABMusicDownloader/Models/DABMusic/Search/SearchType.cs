@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DABMusicDownloader.Models.Search
+namespace DABMusicDownloader.Models.DABMusic.Search
 {
     public enum SearchType
     {

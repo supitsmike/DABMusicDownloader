@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DABMusicDownloader.Models.Search
+namespace DABMusicDownloader.Models.DABMusic.Search
 {
     public class Pagination
     {

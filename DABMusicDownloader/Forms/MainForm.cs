@@ -12,7 +12,7 @@ namespace DABMusicDownloader.Forms
         private List<SearchResponseAlbum> _currentAlbums = [];
         private List<SearchResponseAlbumTrack> _currentAlbumTracks = [];
         private string _currentSearchQuery = string.Empty;
-        private Models.Search.SearchType _currentSearchType = Models.Search.SearchType.Track;
+        private Models.DABMusic.Search.SearchType _currentSearchType = Models.DABMusic.Search.SearchType.Track;
         private int _currentSearchOffset;
         private bool _searching;
 
@@ -43,7 +43,7 @@ namespace DABMusicDownloader.Forms
             if (string.IsNullOrWhiteSpace(txtSearchQuery.Text) || _searching) return;
 
             _currentSearchQuery = txtSearchQuery.Text;
-            _currentSearchType = (Models.Search.SearchType)cmbSearchType.SelectedIndex;
+            _currentSearchType = (Models.DABMusic.Search.SearchType)cmbSearchType.SelectedIndex;
             _currentSearchOffset = 0;
 
             UpdateStatus(StatusType.Searching);
@@ -158,7 +158,7 @@ namespace DABMusicDownloader.Forms
             UpdateStatus(StatusType.Ready);
         }
 
-        private async Task<Models.Album.Album> GetAlbumInfo(string albumId)
+        private async Task<Models.DABMusic.Album.Album> GetAlbumInfo(string albumId)
         {
             if (string.IsNullOrWhiteSpace(albumId)) return null;
 
@@ -200,11 +200,11 @@ namespace DABMusicDownloader.Forms
             dgvSearchResults.DataSource = null;
             switch (_currentSearchType)
             {
-                case Models.Search.SearchType.Track when response.Tracks.Count != 0:
+                case Models.DABMusic.Search.SearchType.Track when response.Tracks.Count != 0:
                     _currentTracks.AddRange(response.Tracks.Select(track => new SearchResponseTrack(track)));
                     dataSource = _currentTracks;
                     break;
-                case Models.Search.SearchType.Album when response.Albums.Count != 0:
+                case Models.DABMusic.Search.SearchType.Album when response.Albums.Count != 0:
                     _currentAlbums.AddRange(response.Albums.Select(album => new SearchResponseAlbum(album)));
                     dataSource = _currentAlbums;
                     break;
@@ -227,8 +227,8 @@ namespace DABMusicDownloader.Forms
                 _currentSearchOffset = response.Pagination.Offset + response.Pagination.Returned;
                 lblSearchResults.Text = _currentSearchType switch
                 {
-                    Models.Search.SearchType.Track when response.Tracks.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
-                    Models.Search.SearchType.Album when response.Albums.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
+                    Models.DABMusic.Search.SearchType.Track when response.Tracks.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
+                    Models.DABMusic.Search.SearchType.Album when response.Albums.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
                     _ => string.Empty
                 };
             }
@@ -307,7 +307,7 @@ namespace DABMusicDownloader.Forms
             lblStatusSplash.Text = message;
         }
 
-        private class SearchResponseTrack(Models.Search.Track track)
+        private class SearchResponseTrack(Models.DABMusic.Search.Track track)
         {
             public int TrackId => track.Id;
             public string AlbumId => track.AlbumId;
@@ -343,7 +343,7 @@ namespace DABMusicDownloader.Forms
             public string HiRes => track.AudioQuality.IsHiRes == true ? "True" : "False";
         }
 
-        private class SearchResponseAlbum(Models.Search.Album album)
+        private class SearchResponseAlbum(Models.DABMusic.Search.Album album)
         {
             public string AlbumId => album.Id;
             public Image AlbumCover
@@ -377,7 +377,7 @@ namespace DABMusicDownloader.Forms
             public string HiRes => album.AudioQuality.IsHiRes == true ? "True" : "False";
         }
 
-        private class SearchResponseAlbumTrack(Models.Album.Track track)
+        private class SearchResponseAlbumTrack(Models.DABMusic.Album.Track track)
         {
             public string TrackId => track.Id;
             public string AlbumId => track.AlbumId;

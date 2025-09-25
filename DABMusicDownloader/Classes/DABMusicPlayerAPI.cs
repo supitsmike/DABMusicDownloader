@@ -1,7 +1,7 @@
-﻿using DABMusicDownloader.Models.Album;
-using DABMusicDownloader.Models.Discography;
-using DABMusicDownloader.Models.Search;
-using DABMusicDownloader.Models.Stream;
+﻿using DABMusicDownloader.Models.DABMusic.Album;
+using DABMusicDownloader.Models.DABMusic.Discography;
+using DABMusicDownloader.Models.DABMusic.Search;
+using DABMusicDownloader.Models.DABMusic.Stream;
 using DABMusicDownloader.Properties;
 using RestSharp;
 using System.Net;

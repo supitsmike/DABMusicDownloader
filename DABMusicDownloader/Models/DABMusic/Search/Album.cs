@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using DABMusicDownloader.Models.DABMusic;
+using System.Text.Json.Serialization;
 
-namespace DABMusicDownloader.Models.Album
+namespace DABMusicDownloader.Models.DABMusic.Search
 {
-    public class Track
+    public class Album
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }
@@ -16,14 +17,8 @@ namespace DABMusicDownloader.Models.Album
         [JsonPropertyName("artistId")]
         public int ArtistId { get; set; }
 
-        [JsonPropertyName("albumTitle")]
-        public string AlbumTitle { get; set; }
-
-        [JsonPropertyName("albumCover")]
-        public string AlbumCover { get; set; }
-
-        [JsonPropertyName("albumId")]
-        public string AlbumId { get; set; }
+        [JsonPropertyName("cover")]
+        public string Cover { get; set; }
 
         [JsonPropertyName("releaseDate")]
         public string ReleaseDate { get; set; }
@@ -31,10 +26,19 @@ namespace DABMusicDownloader.Models.Album
         [JsonPropertyName("genre")]
         public string Genre { get; set; }
 
-        [JsonPropertyName("duration")]
-        public int Duration { get; set; }
+        [JsonPropertyName("trackCount")]
+        public int TrackCount { get; set; }
 
         [JsonPropertyName("audioQuality")]
         public AudioQuality AudioQuality { get; set; }
+
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+
+        [JsonPropertyName("genreId")]
+        public int GenreId { get; set; }
+
+        [JsonPropertyName("images")]
+        public Images Images { get; set; }
     }
 }

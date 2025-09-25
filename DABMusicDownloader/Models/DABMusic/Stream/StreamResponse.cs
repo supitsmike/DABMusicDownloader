@@ -1,6 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using DABMusicDownloader.Models.DABMusic;
+using System.Text.Json.Serialization;
 
-namespace DABMusicDownloader.Models.Stream
+namespace DABMusicDownloader.Models.DABMusic.Stream
 {
     public class StreamResponse : ResponseError
     {

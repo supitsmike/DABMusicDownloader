@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DABMusicDownloader.Models.Discography
+namespace DABMusicDownloader.Models.DABMusic.Discography
 {
     public class Label
     {
