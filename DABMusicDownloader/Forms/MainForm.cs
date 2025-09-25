@@ -145,12 +145,79 @@ namespace DABMusicDownloader.Forms
             lblSearchResults.Text = $@"{_currentItems.Count} unique albums loaded";
         }
 
-        private void btnDownloadSelected_Click(object sender, EventArgs e)
+        private async void btnDownloadSelected_Click(object sender, EventArgs e)
         {
+            if (dgvSearchResults.SelectedRows.Count == 0) return;
+            if (dgvSearchResults.SelectedRows[0].DataBoundItem is not SearchResponseItem searchResponseItem) return;
+
             UpdateStatus(StatusType.Downloading);
 
+            var trackList = new List<QobuzTrack>();
+            if (searchResponseItem.TrackId == null)
+            {
+                var albumResponse = await QobuzDLAPI.GetAlbumAsync(searchResponseItem.AlbumId);
+                if (albumResponse == null || albumResponse.Data == null)
+                {
+                    UpdateStatus(StatusType.Ready);
+                    return;
+                }
 
+                trackList.AddRange(albumResponse.Data.Tracks.Items);
+            }
+            else
+            {
+                trackList.Add(searchResponseItem.Track);
+            }
 
+            var folderPath = $"{Properties.Settings.Default.DownloadLocation}\\{searchResponseItem.Album?.Artist.Name}\\{searchResponseItem.Album?.Title}";
+            Directory.CreateDirectory(folderPath);
+
+            prgDownload.Value = 0;
+            prgDownload.Maximum = trackList.Count;
+
+            var tasks = new List<Task>();
+            var semaphore = new SemaphoreSlim(Properties.Settings.Default.ConcurrentDownloads);
+            for (var i = 0; i < trackList.Count; i++)
+            {
+                var track = trackList[i];
+                var index = i;
+                tasks.Add(Task.Run(async () =>
+                {
+                    await semaphore.WaitAsync();
+                    try
+                    {
+                        var downloadResponse = await QobuzDLAPI.DownloadMusicAsync(track.Id, Properties.Settings.Default.DownloadQuality);
+                        if (downloadResponse == null || downloadResponse.Data == null) return;
+
+                        if (string.IsNullOrWhiteSpace(downloadResponse.Data.Url))
+                        {
+                            Invoke(() =>
+                            {
+                                MessageBox.Show(@"Failed to get track stream... Skipping song.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                prgDownload.Value++;
+                            });
+                            return;
+                        }
+
+                        using var httpClient = new HttpClient();
+                        await using var stream = await httpClient.GetStreamAsync(downloadResponse.Data.Url);
+                        var filePath = $"{folderPath}\\{index + 1}. {track.Title}.flac";
+                        await using var fileStream = new FileStream(filePath, FileMode.OpenOrCreate);
+                        await stream.CopyToAsync(fileStream);
+
+                        Invoke(() =>
+                        {
+                            prgDownload.Value++;
+                        });
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
             UpdateStatus(StatusType.Ready);
         }
 
