@@ -131,18 +131,20 @@ namespace DABMusicDownloader.Forms
                 return;
             }
 
+            object dataSource = null;
             dgvSearchResults.DataSource = null;
             switch (_currentSearchType)
             {
                 case SearchType.Track when response.Tracks.Count != 0:
                     _currentTracks.AddRange(response.Tracks.Select(track => new SearchResponseTrack(track)));
-                    dgvSearchResults.DataSource = _currentTracks;
+                    dataSource = _currentTracks;
                     break;
                 case SearchType.Album when response.Albums.Count != 0:
                     _currentAlbums.AddRange(response.Albums.Select(album => new SearchResponseAlbum(album)));
-                    dgvSearchResults.DataSource = _currentAlbums;
+                    dataSource = _currentAlbums;
                     break;
             }
+            dgvSearchResults.DataSource = dataSource;
 
             FormatResultsGrid();
             if (dgvSearchResults.RowCount > 0)
@@ -158,7 +160,12 @@ namespace DABMusicDownloader.Forms
             if (response.Pagination.HasMore)
             {
                 _currentSearchOffset = response.Pagination.Offset + response.Pagination.Returned;
-                lblSearchResults.Text = $@"{_currentSearchOffset} unique tracks loaded";
+                lblSearchResults.Text = _currentSearchType switch
+                {
+                    SearchType.Track when response.Tracks.Count != 0 => $@"{_currentSearchOffset} unique tracks loaded",
+                    SearchType.Album when response.Albums.Count != 0 => $@"{_currentSearchOffset} unique albums loaded",
+                    _ => string.Empty
+                };
             }
 
             dgvSearchResults.Enabled = true;
