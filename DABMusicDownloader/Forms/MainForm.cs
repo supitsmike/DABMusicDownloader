@@ -242,7 +242,7 @@ namespace DABMusicDownloader.Forms
             lblStatusSplash.Text = message;
         }
 
-        private class SearchResponseTrack(Track track)
+        private class SearchResponseTrack(Models.Search.Track track)
         {
             public int TrackId => track.Id;
             public string AlbumId => track.AlbumId;
@@ -278,7 +278,7 @@ namespace DABMusicDownloader.Forms
             public string HiRes => track.AudioQuality.IsHiRes == true ? "True" : "False";
         }
 
-        private class SearchResponseAlbum(Album album)
+        private class SearchResponseAlbum(Models.Search.Album album)
         {
             public string AlbumId => album.Id;
             public Image AlbumCover
@@ -310,6 +310,41 @@ namespace DABMusicDownloader.Forms
             public int TrackCount => album.TrackCount;
             public string AudioQuality => $"{album.AudioQuality.MaximumBitDepth}bit / {album.AudioQuality.MaximumSamplingRate}kHz";
             public string HiRes => album.AudioQuality.IsHiRes == true ? "True" : "False";
+        }
+
+        private class SearchResponseAlbumTrack(Models.Album.Track track)
+        {
+            public string TrackId => track.Id;
+            public string AlbumId => track.AlbumId;
+            public Image AlbumCover
+            {
+                get
+                {
+                    var albumId = track.AlbumId;
+                    var albumCover = track.AlbumCover;
+                    if (string.IsNullOrWhiteSpace(albumId) || string.IsNullOrWhiteSpace(albumCover)) return null;
+
+                    try
+                    {
+                        var image = AlbumCoverCache.GetValueOrDefault(albumId);
+                        if (image != null) return image;
+
+                        using var stream = HttpClient.GetStreamAsync(albumCover).GetAwaiter().GetResult();
+                        AlbumCoverCache[albumId] = Image.FromStream(stream);
+
+                        return AlbumCoverCache.GetValueOrDefault(albumId);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+            public string Title => track.Title;
+            public string Artist => track.Artist;
+            public string Album => track.AlbumTitle;
+            public string AudioQuality => $"{track.AudioQuality.MaximumBitDepth}bit / {track.AudioQuality.MaximumSamplingRate}kHz";
+            public string HiRes => track.AudioQuality.IsHiRes == true ? "True" : "False";
         }
     }
 }
