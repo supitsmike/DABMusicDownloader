@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace QobuzMusicDownloader.Models
+﻿namespace QobuzMusicDownloader.QobuzDL.Core
 {
     /// <summary>
     /// Search filter categories
@@ -10,19 +8,16 @@ namespace QobuzMusicDownloader.Models
         /// <summary>
         /// Focus on album results
         /// </summary>
-        [EnumMember(Value = "albums")]
         Albums,
 
         /// <summary>
         /// Focus on track results
         /// </summary>
-        [EnumMember(Value = "tracks")]
         Tracks,
 
         /// <summary>
         /// Focus on artist results
         /// </summary>
-        [EnumMember(Value = "artists")]
         Artists
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace QobuzMusicDownloader.Models.Responses
+namespace QobuzMusicDownloader.QobuzDL.Responses
 {
     public class DownloadResponse : ApiResponse<DownloadData>;
 

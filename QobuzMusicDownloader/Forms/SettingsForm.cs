@@ -1,5 +1,5 @@
-﻿using QobuzMusicDownloader.Models;
-using QobuzMusicDownloader.Properties;
+﻿using QobuzMusicDownloader.Properties;
+using QobuzMusicDownloader.QobuzDL.Core;
 
 namespace QobuzMusicDownloader.Forms
 {

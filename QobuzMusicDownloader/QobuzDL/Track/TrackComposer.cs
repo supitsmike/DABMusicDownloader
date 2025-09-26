@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace QobuzMusicDownloader.Models.Track
+namespace QobuzMusicDownloader.QobuzDL.Track
 {
-    public class TrackPerformer
+    public class TrackComposer
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;

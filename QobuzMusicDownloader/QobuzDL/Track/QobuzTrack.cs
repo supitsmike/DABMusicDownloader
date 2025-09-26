@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using QobuzMusicDownloader.Models.Album;
+using QobuzMusicDownloader.QobuzDL.Album;
 
-namespace QobuzMusicDownloader.Models.Track
+namespace QobuzMusicDownloader.QobuzDL.Track
 {
     public class QobuzTrack
     {

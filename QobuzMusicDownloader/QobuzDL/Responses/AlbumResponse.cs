@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using QobuzMusicDownloader.Models.Album;
-using QobuzMusicDownloader.Models.Track;
+using QobuzMusicDownloader.QobuzDL.Album;
+using QobuzMusicDownloader.QobuzDL.Track;
 
-namespace QobuzMusicDownloader.Models.Responses
+namespace QobuzMusicDownloader.QobuzDL.Responses
 {
     public class AlbumResponse : ApiResponse<FetchedQobuzAlbum>;
 

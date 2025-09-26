@@ -1,9 +1,9 @@
-﻿using QobuzMusicDownloader.Models.Responses;
-using QobuzMusicDownloader.Properties;
+﻿using QobuzMusicDownloader.Properties;
+using QobuzMusicDownloader.QobuzDL.Responses;
 using RestSharp;
 using System.Net;
 
-namespace QobuzMusicDownloader.Classes
+namespace QobuzMusicDownloader.QobuzDL
 {
     public class QobuzDLAPI
     {

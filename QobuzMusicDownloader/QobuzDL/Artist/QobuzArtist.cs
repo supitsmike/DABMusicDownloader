@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace QobuzMusicDownloader.Models.Artist
+namespace QobuzMusicDownloader.QobuzDL.Artist
 {
     public class QobuzArtist
     {
