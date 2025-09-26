@@ -152,9 +152,6 @@ namespace DABMusicDownloader.Forms
 
             UpdateStatus(StatusType.Downloading);
 
-            var trackList = new List<QobuzTrack>();
-            if (searchResponseItem.TrackId == null)
-            {
                 var albumResponse = await QobuzDLAPI.GetAlbumAsync(searchResponseItem.AlbumId);
                 if (albumResponse == null || albumResponse.Data == null)
                 {
@@ -162,6 +159,9 @@ namespace DABMusicDownloader.Forms
                     return;
                 }
 
+            var trackList = new List<QobuzTrack>();
+            if (searchResponseItem.TrackId == null)
+            {
                 trackList.AddRange(albumResponse.Data.Tracks.Items);
             }
             else
@@ -201,7 +201,14 @@ namespace DABMusicDownloader.Forms
 
                         using var httpClient = new HttpClient();
                         await using var stream = await httpClient.GetStreamAsync(downloadResponse.Data.Url);
-                        var filePath = $"{folderPath}\\{index + 1}. {track.Title}.flac";
+
+                        var index = albumResponse.Data.Tracks.Items.FindIndex(x => x.Id == track.Id) + 1;
+                        var extension = Settings.Default.DownloadQuality == (int)AudioQuality.High ? "mp3" : "flac";
+
+                        var fileName = $"{index}. {track.Title}.{extension}";
+                        fileName = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars())).Trim();
+                        var filePath = $"{folderPath}\\{fileName}";
+
                         await using var fileStream = new FileStream(filePath, FileMode.OpenOrCreate);
                         await stream.CopyToAsync(fileStream);
 
