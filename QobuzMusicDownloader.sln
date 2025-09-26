@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QobuzMusicDownloader", "QobuzMusicDownloader\QobuzMusicDownloader.csproj", "{5020C045-54C8-432E-B456-BA402EB4BA4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5020C045-54C8-432E-B456-BA402EB4BA4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5020C045-54C8-432E-B456-BA402EB4BA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5020C045-54C8-432E-B456-BA402EB4BA4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5020C045-54C8-432E-B456-BA402EB4BA4B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A0182FB-AFBE-4876-B215-2A5A9FF06542}
+	EndGlobalSection
+EndGlobal
