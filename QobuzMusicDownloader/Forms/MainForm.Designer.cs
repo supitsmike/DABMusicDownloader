@@ -222,7 +222,7 @@
             MinimumSize = new Size(800, 500);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "MainForm";
+            Text = "Qobuz Music Downloader";
             pnlSearch.ResumeLayout(false);
             pnlSearch.PerformLayout();
             menuStrip.ResumeLayout(false);
