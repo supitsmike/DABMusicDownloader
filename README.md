@@ -6,9 +6,9 @@ A Windows desktop application for downloading high-quality music from Qobuz thro
 
 - **Music Search & Discovery**
 
-  - Search for albums, tracks, and artists
+  - Search for albums and tracks
   - Browse search results with album artwork and metadata
-  - Filter results by type (Albums, Tracks, Artists)
+  - Filter results by type (Albums or Tracks)
   - Pagination support for large result sets
 
 - **High-Quality Audio Downloads**
@@ -47,7 +47,7 @@ A Windows desktop application for downloading high-quality music from Qobuz thro
 - Windows operating system
 - .NET 8.0 Runtime
 - Active internet connection
-- Access to compatible Qobuz API service
+- Access to compatible [QobuzDL](https://qqdl.site/) API service
 
 ## Usage
 
