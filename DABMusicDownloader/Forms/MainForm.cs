@@ -2,6 +2,7 @@ using DABMusicDownloader.Classes;
 using DABMusicDownloader.Models.QobuzDL;
 using DABMusicDownloader.Models.QobuzDL.Album;
 using DABMusicDownloader.Models.QobuzDL.Track;
+using DABMusicDownloader.Properties;
 
 namespace DABMusicDownloader.Forms
 {
@@ -152,12 +153,12 @@ namespace DABMusicDownloader.Forms
 
             UpdateStatus(StatusType.Downloading);
 
-                var albumResponse = await QobuzDLAPI.GetAlbumAsync(searchResponseItem.AlbumId);
-                if (albumResponse == null || albumResponse.Data == null)
-                {
-                    UpdateStatus(StatusType.Ready);
-                    return;
-                }
+            var albumResponse = await QobuzDLAPI.GetAlbumAsync(searchResponseItem.AlbumId);
+            if (albumResponse == null || albumResponse.Data == null)
+            {
+                UpdateStatus(StatusType.Ready);
+                return;
+            }
 
             var trackList = new List<QobuzTrack>();
             if (searchResponseItem.TrackId == null)
@@ -169,24 +170,24 @@ namespace DABMusicDownloader.Forms
                 trackList.Add(searchResponseItem.Track);
             }
 
-            var folderPath = $"{Properties.Settings.Default.DownloadLocation}\\{searchResponseItem.Album?.Artist.Name}\\{searchResponseItem.Album?.Title}";
+
+            var folderPath = $"{Settings.Default.DownloadLocation}\\{searchResponseItem.Album?.Artist.Name}\\{searchResponseItem.Album?.Title}";
             Directory.CreateDirectory(folderPath);
 
             prgDownload.Value = 0;
             prgDownload.Maximum = trackList.Count;
 
             var tasks = new List<Task>();
-            var semaphore = new SemaphoreSlim(Properties.Settings.Default.ConcurrentDownloads);
+            var semaphore = new SemaphoreSlim(Settings.Default.ConcurrentDownloads);
             for (var i = 0; i < trackList.Count; i++)
             {
                 var track = trackList[i];
-                var index = i;
                 tasks.Add(Task.Run(async () =>
                 {
                     await semaphore.WaitAsync();
                     try
                     {
-                        var downloadResponse = await QobuzDLAPI.DownloadMusicAsync(track.Id, Properties.Settings.Default.DownloadQuality);
+                        var downloadResponse = await QobuzDLAPI.DownloadMusicAsync(track.Id, Settings.Default.DownloadQuality);
                         if (downloadResponse == null || downloadResponse.Data == null) return;
 
                         if (string.IsNullOrWhiteSpace(downloadResponse.Data.Url))
