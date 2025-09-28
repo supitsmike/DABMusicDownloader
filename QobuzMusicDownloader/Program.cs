@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using QobuzMusicDownloader.Forms;
+using QobuzMusicDownloader.Services;
 
 namespace QobuzMusicDownloader
 {
@@ -18,6 +19,7 @@ namespace QobuzMusicDownloader
             ApplicationConfiguration.Initialize();
 
             var services = new ServiceCollection();
+            services.AddSingleton<IImageCacheService, ImageCacheService>();
             services.AddTransient<SearchForm>();
             ServiceProvider = services.BuildServiceProvider();
 
