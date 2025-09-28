@@ -1,9 +1,12 @@
+using Microsoft.Extensions.DependencyInjection;
 using QobuzMusicDownloader.Forms;
 
 namespace QobuzMusicDownloader
 {
     internal static class Program
     {
+        public static IServiceProvider? ServiceProvider { get; private set; }
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -13,7 +16,12 @@ namespace QobuzMusicDownloader
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+
+            var services = new ServiceCollection();
+            services.AddTransient<SearchForm>();
+            ServiceProvider = services.BuildServiceProvider();
+
+            Application.Run(ServiceProvider.GetRequiredService<SearchForm>());
         }
     }
 }
