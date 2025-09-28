@@ -4,11 +4,6 @@ namespace QobuzMusicDownloader.CustomControls
 {
     public partial class ScrollableLabel : Label
     {
-        //private readonly System.Windows.Forms.Timer AutoScrollTimer = new()
-        //{
-        //    Interval = 30
-        //};
-
         private bool _isPaused;
         private bool _isHovered;
         private bool _isDragging;
