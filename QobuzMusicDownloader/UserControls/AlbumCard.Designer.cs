@@ -1,0 +1,99 @@
+﻿using QobuzMusicDownloader.CustomControls;
+
+namespace QobuzMusicDownloader.UserControls
+{
+    partial class AlbumCard
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            lblAlbumTitle = new ScrollableLabel();
+            lblArtistName = new ScrollableLabel();
+            lblExplicit = new Label();
+            SuspendLayout();
+            // 
+            // lblAlbumTitle
+            // 
+            lblAlbumTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblAlbumTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblAlbumTitle.ForeColor = SystemColors.Control;
+            lblAlbumTitle.Location = new Point(21, 203);
+            lblAlbumTitle.Name = "lblAlbumTitle";
+            lblAlbumTitle.Size = new Size(179, 15);
+            lblAlbumTitle.TabIndex = 1;
+            lblAlbumTitle.Text = "Album Title";
+            lblAlbumTitle.TextAlign = ContentAlignment.MiddleLeft;
+            lblAlbumTitle.UseMnemonic = false;
+            lblAlbumTitle.Click += AlbumCard_Click;
+            lblAlbumTitle.DoubleClick += AlbumCard_DoubleClick;
+            // 
+            // lblArtistName
+            // 
+            lblArtistName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblArtistName.ForeColor = SystemColors.ControlDark;
+            lblArtistName.Location = new Point(0, 221);
+            lblArtistName.Name = "lblArtistName";
+            lblArtistName.Size = new Size(200, 15);
+            lblArtistName.TabIndex = 2;
+            lblArtistName.Text = "Artist Name";
+            lblArtistName.TextAlign = ContentAlignment.MiddleLeft;
+            lblArtistName.UseMnemonic = false;
+            lblArtistName.Click += AlbumCard_Click;
+            lblArtistName.DoubleClick += AlbumCard_DoubleClick;
+            // 
+            // lblExplicit
+            // 
+            lblExplicit.BackColor = SystemColors.Control;
+            lblExplicit.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
+            lblExplicit.Location = new Point(0, 203);
+            lblExplicit.Name = "lblExplicit";
+            lblExplicit.Size = new Size(15, 15);
+            lblExplicit.TabIndex = 4;
+            lblExplicit.Text = "E";
+            lblExplicit.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // AlbumCard
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(20, 20, 20);
+            Controls.Add(lblExplicit);
+            Controls.Add(lblAlbumTitle);
+            Controls.Add(lblArtistName);
+            Margin = new Padding(10);
+            Name = "AlbumCard";
+            Size = new Size(200, 237);
+            Click += AlbumCard_Click;
+            DoubleClick += AlbumCard_DoubleClick;
+            ResumeLayout(false);
+        }
+
+        #endregion
+        private ScrollableLabel lblAlbumTitle;
+        private ScrollableLabel lblArtistName;
+        private Label lblExplicit;
+    }
+}
