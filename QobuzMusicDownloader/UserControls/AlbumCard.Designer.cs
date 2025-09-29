@@ -39,7 +39,7 @@ namespace QobuzMusicDownloader.UserControls
             // 
             lblAlbumTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblAlbumTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblAlbumTitle.ForeColor = SystemColors.Control;
+            lblAlbumTitle.ForeColor = SystemColors.ControlText;
             lblAlbumTitle.Location = new Point(21, 203);
             lblAlbumTitle.Name = "lblAlbumTitle";
             lblAlbumTitle.Size = new Size(179, 15);
@@ -53,7 +53,7 @@ namespace QobuzMusicDownloader.UserControls
             // lblArtistName
             // 
             lblArtistName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblArtistName.ForeColor = SystemColors.ControlDark;
+            lblArtistName.ForeColor = SystemColors.GrayText;
             lblArtistName.Location = new Point(0, 221);
             lblArtistName.Name = "lblArtistName";
             lblArtistName.Size = new Size(200, 15);
@@ -66,8 +66,9 @@ namespace QobuzMusicDownloader.UserControls
             // 
             // lblExplicit
             // 
-            lblExplicit.BackColor = SystemColors.Control;
+            lblExplicit.BackColor = SystemColors.ControlText;
             lblExplicit.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
+            lblExplicit.ForeColor = SystemColors.Control;
             lblExplicit.Location = new Point(0, 203);
             lblExplicit.Name = "lblExplicit";
             lblExplicit.Size = new Size(15, 15);
