@@ -79,7 +79,6 @@ namespace QobuzMusicDownloader.UserControls
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(20, 20, 20);
             Controls.Add(lblExplicit);
             Controls.Add(lblAlbumTitle);
             Controls.Add(lblArtistName);
