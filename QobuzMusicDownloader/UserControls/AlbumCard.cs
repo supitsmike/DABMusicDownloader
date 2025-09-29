@@ -64,6 +64,23 @@ namespace QobuzMusicDownloader.UserControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Properties.Settings.Default.DarkMode)
+            {
+                lblExplicit.BackColor = SystemColors.Control;
+                lblExplicit.ForeColor = SystemColors.ControlText;
+
+                lblAlbumTitle.ForeColor = SystemColors.Control;
+                lblArtistName.ForeColor = SystemColors.ControlDark;
+            }
+            else
+            {
+                lblExplicit.BackColor = SystemColors.ControlText;
+                lblExplicit.ForeColor = SystemColors.Control;
+
+                lblAlbumTitle.ForeColor = SystemColors.ControlText;
+                lblArtistName.ForeColor = SystemColors.GrayText;
+            }
+
             var graphics = e.Graphics;
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.CompositingQuality = CompositingQuality.HighQuality;
@@ -81,7 +98,7 @@ namespace QobuzMusicDownloader.UserControls
             }
             else
             {
-                using var brush = new SolidBrush(SystemColors.ControlDarkDark);
+                using var brush = new SolidBrush(SystemColors.WindowFrame);
                 graphics.FillPath(brush, path);
             }
 
