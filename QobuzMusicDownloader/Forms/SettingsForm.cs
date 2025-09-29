@@ -15,6 +15,7 @@ namespace QobuzMusicDownloader.Forms
             cmbDownloadQuality.SelectedValue = Settings.Default.DownloadQuality;
             nudConcurrentDownloads.Value = Settings.Default.ConcurrentDownloads;
             nudSearchResultLimit.Value = Settings.Default.SearchResultLimit;
+            chkDarkMode.Checked = Settings.Default.DarkMode;
         }
 
         private void btnCancel_Click(object sender, EventArgs e) => DialogResult = DialogResult.Cancel;
@@ -26,6 +27,7 @@ namespace QobuzMusicDownloader.Forms
             Settings.Default.DownloadQuality = Convert.ToInt32(cmbDownloadQuality.SelectedValue);
             Settings.Default.ConcurrentDownloads = Convert.ToInt32(nudConcurrentDownloads.Value);
             Settings.Default.SearchResultLimit = Convert.ToInt32(nudSearchResultLimit.Value);
+            Settings.Default.DarkMode = chkDarkMode.Checked;
             Settings.Default.Save();
             DialogResult = DialogResult.OK;
         }

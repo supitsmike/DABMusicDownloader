@@ -40,6 +40,8 @@
             lblSearchResultLimit = new Label();
             cmbDownloadQuality = new ComboBox();
             lblDownloadQuality = new Label();
+            chkDarkMode = new CheckBox();
+            lblDarkMode = new Label();
             ((System.ComponentModel.ISupportInitialize)nudConcurrentDownloads).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudSearchResultLimit).BeginInit();
             SuspendLayout();
@@ -63,7 +65,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnSave.Location = new Point(171, 157);
+            btnSave.Location = new Point(171, 179);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 2;
@@ -74,7 +76,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnCancel.Location = new Point(90, 157);
+            btnCancel.Location = new Point(90, 179);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 3;
@@ -155,11 +157,31 @@
             lblDownloadQuality.TabIndex = 14;
             lblDownloadQuality.Text = "Download Quality:";
             // 
+            // chkDarkMode
+            // 
+            chkDarkMode.AutoSize = true;
+            chkDarkMode.Location = new Point(150, 159);
+            chkDarkMode.Name = "chkDarkMode";
+            chkDarkMode.Size = new Size(15, 14);
+            chkDarkMode.TabIndex = 15;
+            chkDarkMode.UseVisualStyleBackColor = true;
+            // 
+            // lblDarkMode
+            // 
+            lblDarkMode.AutoSize = true;
+            lblDarkMode.Location = new Point(76, 158);
+            lblDarkMode.Name = "lblDarkMode";
+            lblDarkMode.Size = new Size(68, 15);
+            lblDarkMode.TabIndex = 16;
+            lblDarkMode.Text = "Dark Mode:";
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(337, 192);
+            ClientSize = new Size(337, 214);
+            Controls.Add(lblDarkMode);
+            Controls.Add(chkDarkMode);
             Controls.Add(lblDownloadQuality);
             Controls.Add(cmbDownloadQuality);
             Controls.Add(nudSearchResultLimit);
@@ -197,5 +219,7 @@
         private Label lblSearchResultLimit;
         private ComboBox cmbDownloadQuality;
         private Label lblDownloadQuality;
+        private CheckBox chkDarkMode;
+        private Label lblDarkMode;
     }
 }
