@@ -33,13 +33,31 @@ namespace QobuzMusicDownloader.Forms
             await GetMusicFromQobuzDL(true);
         }
 
+        private async void flpSearchResults_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (sender is not FlowLayoutPanel panel) return;
+            if (panel.VerticalScroll.Value < (panel.VerticalScroll.Maximum - panel.VerticalScroll.LargeChange)) return;
+
+            await GetMusicFromQobuzDL(true);
+            await GetMusicFromQobuzDL(true);
+        }
+
+        private async void flpSearchResults_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (sender is not FlowLayoutPanel panel) return;
+            if (panel.VerticalScroll.Value < (panel.VerticalScroll.Maximum - panel.VerticalScroll.LargeChange)) return;
+
+            await GetMusicFromQobuzDL(true);
+            await GetMusicFromQobuzDL(true);
+        }
+
         private async Task GetMusicFromQobuzDL(bool loadMore = false)
         {
             if (_isSearching) return;
             _isSearching = true;
 
             try
-        {
+            {
                 if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
                 else flpSearchResults.Controls.Clear();
 
@@ -51,7 +69,7 @@ namespace QobuzMusicDownloader.Forms
                     flpSearchResults.Controls.Add(albumCard);
                 }
 
-            var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
+                var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
 
                 foreach (var skeletonCard in _skeletonCards.ToList())
                 {
@@ -59,18 +77,18 @@ namespace QobuzMusicDownloader.Forms
                     flpSearchResults.Controls.Remove(skeletonCard);
                 }
 
-            if (response == null || response.Data == null) return;
-            if (_currentSearchType == SearchFilter.Albums)
-            {
-                foreach (var album in response.Data.Albums.Items)
+                if (response == null || response.Data == null) return;
+                if (_currentSearchType == SearchFilter.Albums)
                 {
-                    if (album == null) continue;
-                    var albumCard = new AlbumCard(album);
-                    //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
-                    //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
+                    foreach (var album in response.Data.Albums.Items)
+                    {
+                        if (album == null) continue;
+                        var albumCard = new AlbumCard(album);
+                        //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
+                        //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
 
-                    flpSearchResults.Controls.Add(albumCard);
-                }
+                        flpSearchResults.Controls.Add(albumCard);
+                    }
                 }
             }
             finally
@@ -99,7 +117,7 @@ namespace QobuzMusicDownloader.Forms
             new SettingsForm().ShowDialog(this);
             Invalidate();
         }
-        
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (Properties.Settings.Default.DarkMode)

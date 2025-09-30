@@ -45,6 +45,8 @@ namespace QobuzMusicDownloader.Forms
             flpSearchResults.Name = "flpSearchResults";
             flpSearchResults.Size = new Size(897, 513);
             flpSearchResults.TabIndex = 0;
+            flpSearchResults.Scroll += flpSearchResults_Scroll;
+            flpSearchResults.MouseWheel += flpSearchResults_MouseWheel;
             // 
             // btnSearch
             // 
