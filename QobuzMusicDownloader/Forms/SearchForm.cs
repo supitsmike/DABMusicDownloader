@@ -1,14 +1,14 @@
 ﻿using QobuzMusicDownloader.QobuzDL;
-using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Core;
+using QobuzMusicDownloader.QobuzDL.Responses;
 using QobuzMusicDownloader.UserControls;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace QobuzMusicDownloader.Forms
 {
     public partial class SearchForm : Form
     {
         private readonly List<AlbumCard> _skeletonCards = [];
+        private readonly QobuzSearchResults _currentSearchResults = new();
 
         private bool _isSearching;
         private string _currentSearchQuery = string.Empty;
@@ -26,8 +26,12 @@ namespace QobuzMusicDownloader.Forms
         private async void btnSearch_Click(object sender, EventArgs e)
         {
             _currentSearchQuery = txtSearchQuery.Text;
-            _currentSearchType = (SearchFilter)cmbSearchType.SelectedIndex;
             _currentSearchOffset = 0;
+
+            _currentSearchResults.Query = _currentSearchQuery;
+            _currentSearchResults.Albums.Items.Clear();
+            _currentSearchResults.Tracks.Items.Clear();
+            _currentSearchResults.Artists.Items.Clear();
 
             await GetMusicFromQobuzDL();
             await GetMusicFromQobuzDL(true);
@@ -71,17 +75,20 @@ namespace QobuzMusicDownloader.Forms
                 }
 
                 var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
-
                 foreach (var skeletonCard in _skeletonCards.ToList())
                 {
                     _skeletonCards.Remove(skeletonCard);
                     flpSearchResults.Controls.Remove(skeletonCard);
                 }
-
                 if (response == null || response.Data == null) return;
+
+                _currentSearchResults.Albums.Items.AddRange(response.Data.Albums.Items);
+                _currentSearchResults.Tracks.Items.AddRange(response.Data.Tracks.Items);
+                _currentSearchResults.Artists.Items.AddRange(response.Data.Artists.Items);
+
                 if (_currentSearchType == SearchFilter.Albums)
                 {
-                    foreach (var album in response.Data.Albums.Items)
+                    foreach (var album in _currentSearchResults.Albums.Items)
                     {
                         if (album == null) continue;
                         var albumCard = new AlbumCard(album);
@@ -93,7 +100,7 @@ namespace QobuzMusicDownloader.Forms
                 }
                 if (_currentSearchType == SearchFilter.Tracks)
                 {
-                    foreach (var track in response.Data.Tracks.Items)
+                    foreach (var track in _currentSearchResults.Tracks.Items)
                     {
                         if (track == null) continue;
                         var trackCard = new TrackCard(track);
