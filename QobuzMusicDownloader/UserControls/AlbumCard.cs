@@ -8,11 +8,11 @@ namespace QobuzMusicDownloader.UserControls
     public partial class AlbumCard : UserControl
     {
         private readonly IImageCacheService _imageCacheService;
-        private readonly QobuzAlbum _album;
+        private readonly QobuzAlbum? _album;
 
         private Image? _albumCover;
 
-        public AlbumCard(QobuzAlbum album)
+        public AlbumCard(QobuzAlbum? album)
         {
             _album = album;
             _imageCacheService = ServiceLocator.GetService<IImageCacheService>();
@@ -23,10 +23,10 @@ namespace QobuzMusicDownloader.UserControls
 
         private void UpdateAlbumInfo()
         {
-            lblAlbumTitle.Text = _album.Title;
-            lblArtistName.Text = _album.Artist.Name;
+            lblAlbumTitle.Text = _album?.Title;
+            lblArtistName.Text = _album?.Artist.Name;
 
-            if (_album.ParentalWarning == false)
+            if (_album?.ParentalWarning == false)
             {
                 lblExplicit.Visible = false;
                 lblAlbumTitle.Location = new Point(0, lblAlbumTitle.Location.Y);
@@ -38,6 +38,14 @@ namespace QobuzMusicDownloader.UserControls
         {
             try
             {
+                if (_album == null)
+                {
+                    lblAlbumTitle.Visible = false;
+                    lblArtistName.Visible = false;
+                    lblExplicit.Visible = false;
+                    return;
+                }
+
                 UpdateAlbumInfo();
 
                 _albumCover = await _imageCacheService.GetImageAsync(_album.Image.Small, _album.Id);
