@@ -25,7 +25,7 @@ namespace QobuzMusicDownloader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://us.qqdl.site/api")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://qqdl.site/api")]
         public string BaseURL {
             get {
                 return ((string)(this["BaseURL"]));

@@ -40,7 +40,8 @@ namespace QobuzMusicDownloader.QobuzDL
             var request = new RestRequest("get-music")
                 .AddQueryParameter("q", query)
                 .AddQueryParameter("offset", offset)
-                .AddHeader("Accept", "application/json");
+                .AddHeader("Accept", "application/json")
+                .AddHeader("Token-Country", "US");
 
             try
             {
@@ -61,7 +62,8 @@ namespace QobuzMusicDownloader.QobuzDL
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("get-album")
                 .AddQueryParameter("album_id", albumId)
-                .AddHeader("Accept", "application/json");
+                .AddHeader("Accept", "application/json")
+                .AddHeader("Token-Country", "US");
 
             try
             {
@@ -83,7 +85,8 @@ namespace QobuzMusicDownloader.QobuzDL
             var request = new RestRequest("download-music")
                 .AddQueryParameter("track_id", trackId)
                 .AddQueryParameter("quality", quality)
-                .AddHeader("Accept", "application/json");
+                .AddHeader("Accept", "application/json")
+                .AddHeader("Token-Country", "US");
 
             try
             {

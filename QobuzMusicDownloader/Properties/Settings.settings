@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BaseURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://us.qqdl.site/api</Value>
+      <Value Profile="(Default)">https://qqdl.site/api</Value>
     </Setting>
     <Setting Name="DownloadLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
