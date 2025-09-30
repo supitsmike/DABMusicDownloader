@@ -1,6 +1,8 @@
 ﻿using QobuzMusicDownloader.QobuzDL;
+using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Core;
 using QobuzMusicDownloader.QobuzDL.Responses;
+using QobuzMusicDownloader.QobuzDL.Track;
 using QobuzMusicDownloader.UserControls;
 
 namespace QobuzMusicDownloader.Forms
@@ -119,39 +121,27 @@ namespace QobuzMusicDownloader.Forms
 
         //private void OnAlbumClicked(QobuzAlbum album)
         //{
-        //    MessageBox.Show($@"Clicked: {album.Title} by {album.Artist}");
+        //    MessageBox.Show($@"Clicked: {album.Title} by {album.Artist.Name}");
         //}
         //
         //private void OnAlbumDoubleClick(QobuzAlbum album)
         //{
-        //    MessageBox.Show($@"Double Clicked: {album.Title} by {album.Artist}");
+        //    MessageBox.Show($@"Double Clicked: {album.Title} by {album.Artist.Name}");
+        //}
+        //
+        //private void OnTrackClicked(QobuzTrack track)
+        //{
+        //    MessageBox.Show($@"Clicked: {track.Title} by {track.Album.Artist.Name}");
+        //}
+        //
+        //private void OnTrackDoubleClick(QobuzTrack track)
+        //{
+        //    MessageBox.Show($@"Double Clicked: {track.Title} by {track.Album.Artist.Name}");
         //}
 
         private void txtSearchQuery_TextChanged(object sender, EventArgs e)
         {
             btnSearch.Enabled = string.IsNullOrWhiteSpace(txtSearchQuery.Text) == false;
-        }
-
-        private void btnSettings_Click(object sender, EventArgs e)
-        {
-            new SettingsForm().ShowDialog(this);
-            Invalidate();
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (Properties.Settings.Default.DarkMode)
-            {
-                BackColor = Color.FromArgb(20, 20, 20);
-                ForeColor = SystemColors.Control;
-            }
-            else
-            {
-                BackColor = SystemColors.Control;
-                ForeColor = SystemColors.ControlText;
-            }
-
-            base.OnPaint(e);
         }
 
         private void cmbSearchType_SelectedIndexChanged(object sender, EventArgs e)
@@ -191,6 +181,28 @@ namespace QobuzMusicDownloader.Forms
                 cmbSearchType.SelectedIndex = 0;
                 _currentSearchType = SearchFilter.Albums;
             }
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().ShowDialog(this);
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (Properties.Settings.Default.DarkMode)
+            {
+                BackColor = Color.FromArgb(20, 20, 20);
+                ForeColor = SystemColors.Control;
+            }
+            else
+            {
+                BackColor = SystemColors.Control;
+                ForeColor = SystemColors.ControlText;
+            }
+
+            base.OnPaint(e);
         }
     }
 }
