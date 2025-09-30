@@ -82,6 +82,7 @@ namespace QobuzMusicDownloader.Forms
             cmbSearchType.Name = "cmbSearchType";
             cmbSearchType.Size = new Size(80, 29);
             cmbSearchType.TabIndex = 3;
+            cmbSearchType.SelectedIndexChanged += cmbSearchType_SelectedIndexChanged;
             // 
             // btnSettings
             // 

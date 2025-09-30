@@ -153,5 +153,44 @@ namespace QobuzMusicDownloader.Forms
 
             base.OnPaint(e);
         }
+
+        private void cmbSearchType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_currentSearchType == (SearchFilter)cmbSearchType.SelectedIndex) return;
+
+            _currentSearchType = (SearchFilter)cmbSearchType.SelectedIndex;
+            flpSearchResults.Controls.Clear();
+
+            if (_currentSearchType == SearchFilter.Albums)
+            {
+                foreach (var album in _currentSearchResults.Albums.Items)
+                {
+                    if (album == null) continue;
+                    var albumCard = new AlbumCard(album);
+                    //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
+                    //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
+
+                    flpSearchResults.Controls.Add(albumCard);
+                }
+            }
+            else if (_currentSearchType == SearchFilter.Tracks)
+            {
+                foreach (var track in _currentSearchResults.Tracks.Items)
+                {
+                    if (track == null) continue;
+                    var trackCard = new TrackCard(track);
+                    //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
+                    //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
+
+                    flpSearchResults.Controls.Add(trackCard);
+                }
+            }
+            else if (_currentSearchType == SearchFilter.Artists)
+            {
+                MessageBox.Show(@"Artist Search is not supported.", @"Not Implemented", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cmbSearchType.SelectedIndex = 0;
+                _currentSearchType = SearchFilter.Albums;
+            }
+        }
     }
 }
