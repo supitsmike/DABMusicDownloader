@@ -7,6 +7,9 @@ namespace QobuzMusicDownloader.Forms
 {
     public partial class SearchForm : Form
     {
+        private readonly List<AlbumCard> _skeletonCards = [];
+
+        private bool _isSearching;
         private string _currentSearchQuery = string.Empty;
         private SearchFilter _currentSearchType = SearchFilter.Albums;
         private int _currentSearchOffset;
@@ -25,27 +28,54 @@ namespace QobuzMusicDownloader.Forms
             _currentSearchType = (SearchFilter)cmbSearchType.SelectedIndex;
             _currentSearchOffset = 0;
 
-            await SearchQobuzDL();
+            await GetMusicFromQobuzDL();
+            await GetMusicFromQobuzDL(true);
+            await GetMusicFromQobuzDL(true);
         }
 
-        private async Task SearchQobuzDL()
+        private async Task GetMusicFromQobuzDL(bool loadMore = false)
         {
-            var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
-            if (response == null || response.Data == null) return;
+            if (_isSearching) return;
+            _isSearching = true;
 
-            flpSearchResults.Controls.Clear();
+            try
+        {
+                if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
+                else flpSearchResults.Controls.Clear();
+
+                _skeletonCards.Clear();
+                for (var i = 0; i < Properties.Settings.Default.SearchResultLimit; i++)
+                {
+                    var albumCard = new AlbumCard(null);
+                    _skeletonCards.Add(albumCard);
+                    flpSearchResults.Controls.Add(albumCard);
+                }
+
+            var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
+
+                foreach (var skeletonCard in _skeletonCards.ToList())
+                {
+                    _skeletonCards.Remove(skeletonCard);
+                    flpSearchResults.Controls.Remove(skeletonCard);
+                }
+
+            if (response == null || response.Data == null) return;
             if (_currentSearchType == SearchFilter.Albums)
             {
                 foreach (var album in response.Data.Albums.Items)
                 {
                     if (album == null) continue;
-
                     var albumCard = new AlbumCard(album);
                     //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
                     //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
 
                     flpSearchResults.Controls.Add(albumCard);
                 }
+                }
+            }
+            finally
+            {
+                _isSearching = false;
             }
         }
 
