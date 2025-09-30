@@ -2,6 +2,7 @@
 using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Core;
 using QobuzMusicDownloader.UserControls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace QobuzMusicDownloader.Forms
 {
@@ -88,6 +89,18 @@ namespace QobuzMusicDownloader.Forms
                         //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
 
                         flpSearchResults.Controls.Add(albumCard);
+                    }
+                }
+                if (_currentSearchType == SearchFilter.Tracks)
+                {
+                    foreach (var track in response.Data.Tracks.Items)
+                    {
+                        if (track == null) continue;
+                        var trackCard = new TrackCard(track);
+                        //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
+                        //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
+
+                        flpSearchResults.Controls.Add(trackCard);
                     }
                 }
             }
