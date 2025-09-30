@@ -41,9 +41,9 @@ namespace QobuzMusicDownloader.UserControls
             lblTrackTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblTrackTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblTrackTitle.ForeColor = SystemColors.ControlText;
-            lblTrackTitle.Location = new Point(21, 203);
+            lblTrackTitle.Location = new Point(17, 203);
             lblTrackTitle.Name = "lblTrackTitle";
-            lblTrackTitle.Size = new Size(179, 15);
+            lblTrackTitle.Size = new Size(183, 15);
             lblTrackTitle.TabIndex = 1;
             lblTrackTitle.Text = "Track Title";
             lblTrackTitle.TextAlign = ContentAlignment.MiddleLeft;

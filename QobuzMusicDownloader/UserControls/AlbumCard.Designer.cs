@@ -40,9 +40,9 @@ namespace QobuzMusicDownloader.UserControls
             lblAlbumTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblAlbumTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblAlbumTitle.ForeColor = SystemColors.ControlText;
-            lblAlbumTitle.Location = new Point(21, 203);
+            lblAlbumTitle.Location = new Point(17, 203);
             lblAlbumTitle.Name = "lblAlbumTitle";
-            lblAlbumTitle.Size = new Size(179, 15);
+            lblAlbumTitle.Size = new Size(183, 15);
             lblAlbumTitle.TabIndex = 1;
             lblAlbumTitle.Text = "Album Title";
             lblAlbumTitle.TextAlign = ContentAlignment.MiddleLeft;
