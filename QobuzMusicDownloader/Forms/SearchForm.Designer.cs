@@ -43,7 +43,7 @@ namespace QobuzMusicDownloader.Forms
             flpSearchResults.AutoScroll = true;
             flpSearchResults.Location = new Point(0, 48);
             flpSearchResults.Name = "flpSearchResults";
-            flpSearchResults.Size = new Size(899, 513);
+            flpSearchResults.Size = new Size(897, 513);
             flpSearchResults.TabIndex = 0;
             // 
             // btnSearch
@@ -51,7 +51,7 @@ namespace QobuzMusicDownloader.Forms
             btnSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSearch.Font = new Font("Segoe UI", 12.5F);
             btnSearch.ForeColor = SystemColors.ControlText;
-            btnSearch.Location = new Point(673, 12);
+            btnSearch.Location = new Point(670, 12);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(75, 30);
             btnSearch.TabIndex = 1;
@@ -63,10 +63,10 @@ namespace QobuzMusicDownloader.Forms
             // 
             txtSearchQuery.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtSearchQuery.Font = new Font("Segoe UI", 12.5F);
-            txtSearchQuery.Location = new Point(238, 12);
+            txtSearchQuery.Location = new Point(237, 12);
             txtSearchQuery.Name = "txtSearchQuery";
             txtSearchQuery.PlaceholderText = "Search for anything...";
-            txtSearchQuery.Size = new Size(429, 30);
+            txtSearchQuery.Size = new Size(427, 30);
             txtSearchQuery.TabIndex = 2;
             txtSearchQuery.TextChanged += txtSearchQuery_TextChanged;
             // 
@@ -76,7 +76,7 @@ namespace QobuzMusicDownloader.Forms
             cmbSearchType.Font = new Font("Segoe UI", 12F);
             cmbSearchType.FormattingEnabled = true;
             cmbSearchType.Items.AddRange(new object[] { "Albums", "Tracks", "Atrists" });
-            cmbSearchType.Location = new Point(152, 12);
+            cmbSearchType.Location = new Point(151, 12);
             cmbSearchType.Name = "cmbSearchType";
             cmbSearchType.Size = new Size(80, 29);
             cmbSearchType.TabIndex = 3;
@@ -96,7 +96,7 @@ namespace QobuzMusicDownloader.Forms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(899, 561);
+            ClientSize = new Size(897, 561);
             Controls.Add(btnSettings);
             Controls.Add(cmbSearchType);
             Controls.Add(txtSearchQuery);
