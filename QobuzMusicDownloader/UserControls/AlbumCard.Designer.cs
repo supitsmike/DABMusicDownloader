@@ -1,4 +1,5 @@
 ﻿using QobuzMusicDownloader.CustomControls;
+using System.Reflection;
 
 namespace QobuzMusicDownloader.UserControls
 {
@@ -37,10 +38,10 @@ namespace QobuzMusicDownloader.UserControls
             // 
             // lblAlbumTitle
             // 
-            lblAlbumTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblAlbumTitle.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lblAlbumTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblAlbumTitle.ForeColor = SystemColors.ControlText;
-            lblAlbumTitle.Location = new Point(17, 203);
+            lblAlbumTitle.Location = new Point(17, 201);
             lblAlbumTitle.Name = "lblAlbumTitle";
             lblAlbumTitle.Size = new Size(183, 15);
             lblAlbumTitle.TabIndex = 1;
@@ -52,9 +53,9 @@ namespace QobuzMusicDownloader.UserControls
             // 
             // lblArtistName
             // 
-            lblArtistName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblArtistName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lblArtistName.ForeColor = SystemColors.GrayText;
-            lblArtistName.Location = new Point(0, 221);
+            lblArtistName.Location = new Point(0, 219);
             lblArtistName.Name = "lblArtistName";
             lblArtistName.Size = new Size(200, 15);
             lblArtistName.TabIndex = 2;
@@ -66,10 +67,11 @@ namespace QobuzMusicDownloader.UserControls
             // 
             // lblExplicit
             // 
+            lblExplicit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblExplicit.BackColor = SystemColors.ControlText;
             lblExplicit.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
             lblExplicit.ForeColor = SystemColors.Control;
-            lblExplicit.Location = new Point(0, 203);
+            lblExplicit.Location = new Point(0, 201);
             lblExplicit.Name = "lblExplicit";
             lblExplicit.Size = new Size(15, 15);
             lblExplicit.TabIndex = 4;
@@ -85,7 +87,7 @@ namespace QobuzMusicDownloader.UserControls
             Controls.Add(lblArtistName);
             Margin = new Padding(10);
             Name = "AlbumCard";
-            Size = new Size(200, 237);
+            Size = new Size(200, 236);
             Click += AlbumCard_Click;
             DoubleClick += AlbumCard_DoubleClick;
             ResumeLayout(false);
