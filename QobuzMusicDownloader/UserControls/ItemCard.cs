@@ -49,6 +49,7 @@ namespace QobuzMusicDownloader.UserControls
                     }
 
                     _albumCover = await _imageCacheService.GetImageAsync(_album.Image.Small, _album.Id);
+                    pnlAlbumCover.Invalidate();
                 }
                 else if (_track != null)
                 {
@@ -66,6 +67,7 @@ namespace QobuzMusicDownloader.UserControls
                     }
 
                     _albumCover = await _imageCacheService.GetImageAsync(_track.Album.Image.Small, _track.Album.Id);
+                    pnlAlbumCover.Invalidate();
                 }
                 else
                 {
