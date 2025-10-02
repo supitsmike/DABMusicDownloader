@@ -71,6 +71,7 @@ namespace QobuzMusicDownloader.Forms
             txtSearchQuery.Size = new Size(427, 30);
             txtSearchQuery.TabIndex = 2;
             txtSearchQuery.TextChanged += txtSearchQuery_TextChanged;
+            txtSearchQuery.KeyDown += txtSearchQuery_KeyDown;
             // 
             // cmbSearchType
             // 

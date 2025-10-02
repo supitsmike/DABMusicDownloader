@@ -25,8 +25,21 @@ namespace QobuzMusicDownloader.Forms
             txtSearchQuery.Text = @"Kanye West";
         }
 
+        private void txtSearchQuery_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || _isSearching) return;
+
+            btnSearch.PerformClick();
+
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+        }
+
         private async void btnSearch_Click(object sender, EventArgs e)
         {
+            btnSearch.Enabled = false;
+            flpSearchResults.Controls.Clear();
+
             _currentSearchQuery = txtSearchQuery.Text;
             _currentSearchOffset = 0;
 
@@ -35,12 +48,11 @@ namespace QobuzMusicDownloader.Forms
             _currentSearchResults.Tracks.Items.Clear();
             _currentSearchResults.Artists.Items.Clear();
 
-            await Task.Run(async () =>
-            {
                 await GetMusicFromQobuzDL();
                 await GetMusicFromQobuzDL(true);
                 await GetMusicFromQobuzDL(true);
-            });
+
+            btnSearch.Enabled = true;
         }
 
         private async void flpSearchResults_Scroll(object sender, ScrollEventArgs e)
