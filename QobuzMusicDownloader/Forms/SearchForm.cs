@@ -9,7 +9,7 @@ namespace QobuzMusicDownloader.Forms
 {
     public partial class SearchForm : Form
     {
-        private readonly List<AlbumCard> _skeletonCards = [];
+        private readonly List<ItemCard> _skeletonCards = [];
         private readonly QobuzSearchResults _currentSearchResults = new();
 
         private bool _isSearching;
@@ -35,9 +35,12 @@ namespace QobuzMusicDownloader.Forms
             _currentSearchResults.Tracks.Items.Clear();
             _currentSearchResults.Artists.Items.Clear();
 
-            await GetMusicFromQobuzDL();
-            await GetMusicFromQobuzDL(true);
-            await GetMusicFromQobuzDL(true);
+            await Task.Run(async () =>
+            {
+                await GetMusicFromQobuzDL();
+                await GetMusicFromQobuzDL(true);
+                await GetMusicFromQobuzDL(true);
+            });
         }
 
         private async void flpSearchResults_Scroll(object sender, ScrollEventArgs e)
@@ -68,12 +71,13 @@ namespace QobuzMusicDownloader.Forms
                 if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
                 else flpSearchResults.Controls.Clear();
 
+                flpSearchResults.SuspendLayout();
                 _skeletonCards.Clear();
                 for (var i = 0; i < Properties.Settings.Default.SearchResultLimit; i++)
                 {
-                    var albumCard = new AlbumCard(null);
-                    _skeletonCards.Add(albumCard);
-                    flpSearchResults.Controls.Add(albumCard);
+                    var itemCard = new ItemCard();
+                    _skeletonCards.Add(itemCard);
+                    flpSearchResults.Controls.Add(itemCard);
                 }
 
                 var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
@@ -93,7 +97,7 @@ namespace QobuzMusicDownloader.Forms
                     foreach (var album in _currentSearchResults.Albums.Items)
                     {
                         if (album == null) continue;
-                        var albumCard = new AlbumCard(album);
+                        var albumCard = new ItemCard(album: album);
                         //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
                         //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
 
@@ -105,7 +109,7 @@ namespace QobuzMusicDownloader.Forms
                     foreach (var track in _currentSearchResults.Tracks.Items)
                     {
                         if (track == null) continue;
-                        var trackCard = new TrackCard(track);
+                        var trackCard = new ItemCard(track: track);
                         //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
                         //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
 
@@ -116,6 +120,7 @@ namespace QobuzMusicDownloader.Forms
             finally
             {
                 _isSearching = false;
+                flpSearchResults.ResumeLayout();
             }
         }
 
@@ -156,7 +161,7 @@ namespace QobuzMusicDownloader.Forms
                 foreach (var album in _currentSearchResults.Albums.Items)
                 {
                     if (album == null) continue;
-                    var albumCard = new AlbumCard(album);
+                    var albumCard = new ItemCard(album: album);
                     //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
                     //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
 
@@ -168,7 +173,7 @@ namespace QobuzMusicDownloader.Forms
                 foreach (var track in _currentSearchResults.Tracks.Items)
                 {
                     if (track == null) continue;
-                    var trackCard = new TrackCard(track);
+                    var trackCard = new ItemCard(track: track);
                     //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
                     //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
 

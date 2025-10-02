@@ -1,8 +1,9 @@
 ﻿using QobuzMusicDownloader.CustomControls;
+using System.Reflection;
 
 namespace QobuzMusicDownloader.UserControls
 {
-    partial class TrackCard
+    partial class ItemCard
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,86 +31,98 @@ namespace QobuzMusicDownloader.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            lblTrackTitle = new ScrollableLabel();
+            lblItemTitle = new ScrollableLabel();
             lblArtistName = new ScrollableLabel();
             lblExplicit = new Label();
+            pnlAlbumCover = new Panel();
             lblAlbumTitle = new ScrollableLabel();
             SuspendLayout();
             // 
-            // lblTrackTitle
+            // lblItemTitle
             // 
-            lblTrackTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            lblTrackTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTrackTitle.ForeColor = SystemColors.ControlText;
-            lblTrackTitle.Location = new Point(17, 201);
-            lblTrackTitle.Name = "lblTrackTitle";
-            lblTrackTitle.Size = new Size(183, 15);
-            lblTrackTitle.TabIndex = 1;
-            lblTrackTitle.Text = "Track Title";
-            lblTrackTitle.TextAlign = ContentAlignment.MiddleLeft;
-            lblTrackTitle.UseMnemonic = false;
-            lblTrackTitle.Click += TrackCard_Click;
-            lblTrackTitle.DoubleClick += TrackCard_DoubleClick;
+            lblItemTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblItemTitle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblItemTitle.ForeColor = SystemColors.ControlText;
+            lblItemTitle.Location = new Point(19, 202);
+            lblItemTitle.Name = "lblItemTitle";
+            lblItemTitle.Size = new Size(181, 15);
+            lblItemTitle.TabIndex = 1;
+            lblItemTitle.Text = "Item Title";
+            lblItemTitle.TextAlign = ContentAlignment.MiddleLeft;
+            lblItemTitle.UseMnemonic = false;
+            lblItemTitle.Click += ItemCard_Click;
+            lblItemTitle.DoubleClick += ItemCard_DoubleClick;
             // 
             // lblArtistName
             // 
-            lblArtistName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblArtistName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblArtistName.ForeColor = SystemColors.GrayText;
-            lblArtistName.Location = new Point(0, 219);
+            lblArtistName.Location = new Point(0, 220);
             lblArtistName.Name = "lblArtistName";
             lblArtistName.Size = new Size(200, 15);
             lblArtistName.TabIndex = 2;
             lblArtistName.Text = "Artist Name";
             lblArtistName.TextAlign = ContentAlignment.MiddleLeft;
             lblArtistName.UseMnemonic = false;
-            lblArtistName.Click += TrackCard_Click;
-            lblArtistName.DoubleClick += TrackCard_DoubleClick;
+            lblArtistName.Click += ItemCard_Click;
+            lblArtistName.DoubleClick += ItemCard_DoubleClick;
             // 
             // lblExplicit
             // 
-            lblExplicit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblExplicit.BackColor = SystemColors.ControlText;
             lblExplicit.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
             lblExplicit.ForeColor = SystemColors.Control;
-            lblExplicit.Location = new Point(0, 201);
+            lblExplicit.Location = new Point(2, 202);
             lblExplicit.Name = "lblExplicit";
             lblExplicit.Size = new Size(15, 15);
             lblExplicit.TabIndex = 4;
             lblExplicit.Text = "E";
             lblExplicit.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // pnlAlbumCover
+            // 
+            pnlAlbumCover.Location = new Point(0, 0);
+            pnlAlbumCover.Name = "pnlAlbumCover";
+            pnlAlbumCover.Size = new Size(200, 200);
+            pnlAlbumCover.TabIndex = 5;
+            pnlAlbumCover.Paint += pnlAlbumCover_Paint;
+            pnlAlbumCover.MouseEnter += pnlAlbumCover_MouseEnter;
+            pnlAlbumCover.MouseLeave += pnlAlbumCover_MouseLeave;
+            // 
             // lblAlbumTitle
             // 
-            lblAlbumTitle.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblAlbumTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lblAlbumTitle.ForeColor = SystemColors.GrayText;
-            lblAlbumTitle.Location = new Point(0, 237);
+            lblAlbumTitle.Location = new Point(0, 238);
             lblAlbumTitle.Name = "lblAlbumTitle";
             lblAlbumTitle.Size = new Size(200, 15);
-            lblAlbumTitle.TabIndex = 5;
+            lblAlbumTitle.TabIndex = 6;
             lblAlbumTitle.Text = "Album Title";
             lblAlbumTitle.TextAlign = ContentAlignment.MiddleLeft;
             lblAlbumTitle.UseMnemonic = false;
             // 
-            // TrackCard
+            // ItemCard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(lblAlbumTitle);
+            Controls.Add(pnlAlbumCover);
             Controls.Add(lblExplicit);
-            Controls.Add(lblTrackTitle);
+            Controls.Add(lblItemTitle);
             Controls.Add(lblArtistName);
+            Controls.Add(lblAlbumTitle);
             Margin = new Padding(10);
-            Name = "TrackCard";
-            Size = new Size(200, 254);
-            Click += TrackCard_Click;
-            DoubleClick += TrackCard_DoubleClick;
+            Name = "ItemCard";
+            Size = new Size(200, 255);
+            Click += ItemCard_Click;
+            DoubleClick += ItemCard_DoubleClick;
             ResumeLayout(false);
         }
 
         #endregion
-        private ScrollableLabel lblTrackTitle;
+        private ScrollableLabel lblItemTitle;
         private ScrollableLabel lblArtistName;
         private Label lblExplicit;
+        private Panel pnlAlbumCover;
         private ScrollableLabel lblAlbumTitle;
     }
 }
