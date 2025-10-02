@@ -7,7 +7,7 @@ namespace QobuzMusicDownloader.QobuzDL
 {
     public class QobuzDLAPI
     {
-        private static readonly string BaseUrl = Settings.Default.BaseURL;
+        public static string BaseUrl = Settings.Default.BaseURL;
 
         private static void CheckForErrors<T>(ApiResponse<T>? response)
         {

@@ -43,6 +43,9 @@ namespace QobuzMusicDownloader.Forms
             Settings.Default.SearchPageLimit = Convert.ToInt32(nudSearchPageLimit.Value);
             Settings.Default.DarkMode = chkDarkMode.Checked;
             Settings.Default.Save();
+
+            QobuzDL.QobuzDLAPI.BaseUrl = Settings.Default.BaseURL;
+
             DialogResult = DialogResult.OK;
         }
 
