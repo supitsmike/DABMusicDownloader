@@ -66,3 +66,7 @@ A Windows desktop application for downloading high-quality music from Qobuz thro
 ## Disclaimer
 
 This application is for educational purposes. Users are responsible for ensuring they have proper rights and permissions for any content they download. Respect copyright laws and the terms of service of music platforms.
+
+## Attributions
+
+[Settings icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/settings "settings icons")
