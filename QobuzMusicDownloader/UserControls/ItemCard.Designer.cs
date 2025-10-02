@@ -31,11 +31,13 @@ namespace QobuzMusicDownloader.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             lblItemTitle = new ScrollableLabel();
             lblArtistName = new ScrollableLabel();
             lblExplicit = new Label();
             pnlAlbumCover = new Panel();
             lblAlbumTitle = new ScrollableLabel();
+            toolTip = new ToolTip(components);
             SuspendLayout();
             // 
             // lblItemTitle
@@ -124,5 +126,6 @@ namespace QobuzMusicDownloader.UserControls
         private Label lblExplicit;
         private Panel pnlAlbumCover;
         private ScrollableLabel lblAlbumTitle;
+        private ToolTip toolTip;
     }
 }

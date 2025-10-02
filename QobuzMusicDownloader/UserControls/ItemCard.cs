@@ -49,6 +49,8 @@ namespace QobuzMusicDownloader.UserControls
                     }
 
                     _albumCover = await _imageCacheService.GetImageAsync(_album.Image.Small, _album.Id);
+
+                    toolTip.SetToolTip(pnlAlbumCover, _album.Title);
                     pnlAlbumCover.Invalidate();
                 }
                 else if (_track != null)
@@ -67,6 +69,8 @@ namespace QobuzMusicDownloader.UserControls
                     }
 
                     _albumCover = await _imageCacheService.GetImageAsync(_track.Album.Image.Small, _track.Album.Id);
+
+                    toolTip.SetToolTip(pnlAlbumCover, _track.Title);
                     pnlAlbumCover.Invalidate();
                 }
                 else
