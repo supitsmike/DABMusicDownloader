@@ -115,7 +115,7 @@ namespace QobuzMusicDownloader.Controls
                     Size = new Size(200, 200);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore
             }
