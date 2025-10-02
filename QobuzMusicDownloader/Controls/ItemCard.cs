@@ -30,6 +30,35 @@ namespace QobuzMusicDownloader.Controls
             UpdateAlbumInfo();
         }
 
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (Properties.Settings.Default.DarkMode)
+            {
+                lblExplicit.BackColor = SystemColors.Control;
+                lblExplicit.ForeColor = SystemColors.ControlText;
+
+                lblItemTitle.ForeColor = SystemColors.Control;
+                lblArtistName.ForeColor = SystemColors.ControlDark;
+            }
+            else
+            {
+                lblExplicit.BackColor = SystemColors.ControlText;
+                lblExplicit.ForeColor = SystemColors.Control;
+
+                lblItemTitle.ForeColor = SystemColors.ControlText;
+                lblArtistName.ForeColor = SystemColors.GrayText;
+            }
+
+            base.OnPaint(e);
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            pnlAlbumCover.Invalidate();
+        }
+
         private async void UpdateAlbumInfo()
         {
             try
@@ -123,35 +152,6 @@ namespace QobuzMusicDownloader.Controls
             {
                 TrackDoubleClicked.Invoke(this, _track);
             }
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (Properties.Settings.Default.DarkMode)
-            {
-                lblExplicit.BackColor = SystemColors.Control;
-                lblExplicit.ForeColor = SystemColors.ControlText;
-
-                lblItemTitle.ForeColor = SystemColors.Control;
-                lblArtistName.ForeColor = SystemColors.ControlDark;
-            }
-            else
-            {
-                lblExplicit.BackColor = SystemColors.ControlText;
-                lblExplicit.ForeColor = SystemColors.Control;
-
-                lblItemTitle.ForeColor = SystemColors.ControlText;
-                lblArtistName.ForeColor = SystemColors.GrayText;
-            }
-
-            base.OnPaint(e);
-        }
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            base.OnSizeChanged(e);
-
-            pnlAlbumCover.Invalidate();
         }
 
         private void pnlAlbumCover_Paint(object sender, PaintEventArgs e)
