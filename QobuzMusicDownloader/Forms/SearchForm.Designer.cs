@@ -53,7 +53,7 @@ namespace QobuzMusicDownloader.Forms
             btnSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSearch.Font = new Font("Segoe UI", 12.5F);
             btnSearch.ForeColor = SystemColors.ControlText;
-            btnSearch.Location = new Point(670, 12);
+            btnSearch.Location = new Point(652, 12);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(75, 30);
             btnSearch.TabIndex = 1;
@@ -65,7 +65,7 @@ namespace QobuzMusicDownloader.Forms
             // 
             txtSearchQuery.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtSearchQuery.Font = new Font("Segoe UI", 12.5F);
-            txtSearchQuery.Location = new Point(237, 12);
+            txtSearchQuery.Location = new Point(219, 12);
             txtSearchQuery.Name = "txtSearchQuery";
             txtSearchQuery.PlaceholderText = "Search for anything...";
             txtSearchQuery.Size = new Size(427, 30);
@@ -79,7 +79,7 @@ namespace QobuzMusicDownloader.Forms
             cmbSearchType.Font = new Font("Segoe UI", 12F);
             cmbSearchType.FormattingEnabled = true;
             cmbSearchType.Items.AddRange(new object[] { "Albums", "Tracks", "Atrists" });
-            cmbSearchType.Location = new Point(151, 12);
+            cmbSearchType.Location = new Point(133, 12);
             cmbSearchType.Name = "cmbSearchType";
             cmbSearchType.Size = new Size(80, 29);
             cmbSearchType.TabIndex = 3;
@@ -87,12 +87,14 @@ namespace QobuzMusicDownloader.Forms
             // 
             // btnSettings
             // 
+            btnSettings.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSettings.BackgroundImage = Properties.Resources.settings;
+            btnSettings.BackgroundImageLayout = ImageLayout.Zoom;
             btnSettings.ForeColor = SystemColors.ControlText;
-            btnSettings.Location = new Point(12, 12);
+            btnSettings.Location = new Point(733, 12);
             btnSettings.Name = "btnSettings";
-            btnSettings.Size = new Size(23, 23);
+            btnSettings.Size = new Size(30, 30);
             btnSettings.TabIndex = 4;
-            btnSettings.Text = "Settings";
             btnSettings.UseVisualStyleBackColor = true;
             btnSettings.Click += btnSettings_Click;
             // 
