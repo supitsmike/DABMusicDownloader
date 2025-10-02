@@ -13,7 +13,7 @@ namespace QobuzMusicDownloader.QobuzDL.Responses
         public string Query { get; set; } = string.Empty;
 
         [JsonPropertyName("switchTo")]
-        public string SwitchTo { get; set; } // "albums" | "tracks" | "artists"
+        public string? SwitchTo { get; set; } // "albums" | "tracks" | "artists"
 
         [JsonPropertyName("albums")]
         public PaginatedResults<QobuzAlbum> Albums { get; set; } = new();

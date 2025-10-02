@@ -11,7 +11,7 @@ namespace QobuzMusicDownloader.QobuzDL.Responses
         public T? Data { get; set; }
 
         [JsonPropertyName("error")]
-        public object Error { get; set; } // Can be string or ValidationError[]
+        public object? Error { get; set; } // Can be string or ValidationError[]
     }
 
     public class ValidationError
@@ -32,12 +32,12 @@ namespace QobuzMusicDownloader.QobuzDL.Responses
         public int? Maximum { get; set; }
 
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [JsonPropertyName("received")]
-        public string Received { get; set; }
+        public string? Received { get; set; }
 
         [JsonPropertyName("options")]
-        public string[] Options { get; set; }
+        public string[]? Options { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace QobuzMusicDownloader.QobuzDL.Album
         /// Album version/edition (e.g., "Deluxe Edition", "Remastered")
         /// </summary>
         [JsonPropertyName("version")]
-        public string Version { get; set; }
+        public string? Version { get; set; }
 
         /// <summary>
         /// Primary artist information

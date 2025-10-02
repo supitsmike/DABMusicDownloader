@@ -136,7 +136,7 @@ namespace QobuzMusicDownloader.Forms
                 if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
 
                 var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset).ConfigureAwait(false);
-                if (response.Data == null) return;
+                if (response?.Data == null) return;
 
                 _loadedAlbums.AddRange(response.Data.Albums.Items);
                 _loadedTracks.AddRange(response.Data.Tracks.Items);

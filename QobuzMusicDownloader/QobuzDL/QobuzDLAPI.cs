@@ -9,7 +9,7 @@ namespace QobuzMusicDownloader.QobuzDL
     {
         private static readonly string BaseUrl = Settings.Default.BaseURL;
 
-        private static void CheckForErrors<T>(ApiResponse<T> response)
+        private static void CheckForErrors<T>(ApiResponse<T>? response)
         {
             var errorMessage = @"Something went wrong while executing the API request.";
             if (response == null)
@@ -17,24 +17,22 @@ namespace QobuzMusicDownloader.QobuzDL
                 MessageBox.Show(errorMessage, @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (response.Success != false || response.Error == null) return;
 
-            if (response.Success == false && response.Error != null)
+            if (response.Error is ValidationError[] validationErrors)
             {
-                if (response.Error is ValidationError[] validationErrors)
-                {
-                    var validationError = validationErrors.FirstOrDefault();
-                    errorMessage = validationError?.Message;
-                }
-                else
-                {
-                    errorMessage = Convert.ToString(response.Error);
-                }
-
-                MessageBox.Show(errorMessage, @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var validationError = validationErrors.FirstOrDefault();
+                errorMessage = validationError?.Message;
             }
+            else
+            {
+                errorMessage = Convert.ToString(response.Error);
+            }
+
+            MessageBox.Show(errorMessage, @"API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public static async Task<SearchResponse> GetMusicAsync(string query, int offset = 0)
+        public static async Task<SearchResponse?> GetMusicAsync(string query, int offset = 0)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("get-music")
@@ -57,7 +55,7 @@ namespace QobuzMusicDownloader.QobuzDL
             }
         }
 
-        public static async Task<AlbumResponse> GetAlbumAsync(string albumId)
+        public static async Task<AlbumResponse?> GetAlbumAsync(string albumId)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("get-album")
@@ -79,7 +77,7 @@ namespace QobuzMusicDownloader.QobuzDL
             }
         }
 
-        public static async Task<DownloadResponse> DownloadMusicAsync(int trackId, int quality)
+        public static async Task<DownloadResponse?> DownloadMusicAsync(int trackId, int quality)
         {
             var client = new RestClient(BaseUrl);
             var request = new RestRequest("download-music")

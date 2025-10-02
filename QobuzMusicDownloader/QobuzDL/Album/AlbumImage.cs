@@ -26,6 +26,6 @@ namespace QobuzMusicDownloader.QobuzDL.Album
         /// Back cover image, null if not available
         /// </summary>
         [JsonPropertyName("back")]
-        public string Back { get; set; }
+        public string? Back { get; set; }
     }
 }

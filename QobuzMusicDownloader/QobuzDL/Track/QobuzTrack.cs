@@ -21,7 +21,7 @@ namespace QobuzMusicDownloader.QobuzDL.Track
         /// Track version/remix information
         /// </summary>
         [JsonPropertyName("version")]
-        public string Version { get; set; }
+        public string? Version { get; set; }
 
         /// <summary>
         /// Track number within the album/disc
@@ -81,7 +81,7 @@ namespace QobuzMusicDownloader.QobuzDL.Track
         /// International Standard Recording Code
         /// </summary>
         [JsonPropertyName("isrc")]
-        public string Isrc { get; set; }
+        public string? Isrc { get; set; }
 
         /// <summary>
         /// Copyright information
@@ -105,6 +105,6 @@ namespace QobuzMusicDownloader.QobuzDL.Track
         /// Composer information (optional)
         /// </summary>
         [JsonPropertyName("composer")]
-        public TrackComposer Composer { get; set; }
+        public TrackComposer? Composer { get; set; }
     }
 }

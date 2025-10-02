@@ -26,6 +26,6 @@ namespace QobuzMusicDownloader.QobuzDL.Artist
         /// Artist images in various sizes, null if no image available
         /// </summary>
         [JsonPropertyName("image")]
-        public ArtistImage Image { get; set; }
+        public ArtistImage? Image { get; set; }
     }
 }
