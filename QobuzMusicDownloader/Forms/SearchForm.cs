@@ -1,7 +1,6 @@
 ﻿using QobuzMusicDownloader.QobuzDL;
 using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Core;
-using QobuzMusicDownloader.QobuzDL.Responses;
 using QobuzMusicDownloader.QobuzDL.Track;
 using QobuzMusicDownloader.UserControls;
 
@@ -9,8 +8,8 @@ namespace QobuzMusicDownloader.Forms
 {
     public partial class SearchForm : Form
     {
-        private readonly List<ItemCard> _skeletonCards = [];
-        private readonly QobuzSearchResults _currentSearchResults = new();
+        private readonly List<QobuzAlbum> _loadedAlbums = [];
+        private readonly List<QobuzTrack> _loadedTracks = [];
 
         private bool _isSearching;
         private string _currentSearchQuery = string.Empty;
@@ -43,10 +42,8 @@ namespace QobuzMusicDownloader.Forms
             _currentSearchQuery = txtSearchQuery.Text;
             _currentSearchOffset = 0;
 
-            _currentSearchResults.Query = _currentSearchQuery;
-            _currentSearchResults.Albums.Items.Clear();
-            _currentSearchResults.Tracks.Items.Clear();
-            _currentSearchResults.Artists.Items.Clear();
+            _loadedAlbums.Clear();
+            _loadedTracks.Clear();
 
                 await GetMusicFromQobuzDL();
                 await GetMusicFromQobuzDL(true);
@@ -81,7 +78,6 @@ namespace QobuzMusicDownloader.Forms
             try
             {
                 if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
-                else flpSearchResults.Controls.Clear();
 
                 flpSearchResults.SuspendLayout();
                 _skeletonCards.Clear();
@@ -100,15 +96,11 @@ namespace QobuzMusicDownloader.Forms
                 }
                 if (response == null || response.Data == null) return;
 
-                _currentSearchResults.Albums.Items.AddRange(response.Data.Albums.Items);
-                _currentSearchResults.Tracks.Items.AddRange(response.Data.Tracks.Items);
-                _currentSearchResults.Artists.Items.AddRange(response.Data.Artists.Items);
 
                 if (_currentSearchType == SearchFilter.Albums)
                 {
-                    foreach (var album in _currentSearchResults.Albums.Items)
+                    foreach (var album in _loadedAlbums)
                     {
-                        if (album == null) continue;
                         var albumCard = new ItemCard(album: album);
                         //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
                         //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
@@ -118,9 +110,8 @@ namespace QobuzMusicDownloader.Forms
                 }
                 if (_currentSearchType == SearchFilter.Tracks)
                 {
-                    foreach (var track in _currentSearchResults.Tracks.Items)
+                    foreach (var track in _loadedTracks)
                     {
-                        if (track == null) continue;
                         var trackCard = new ItemCard(track: track);
                         //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
                         //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
@@ -170,9 +161,8 @@ namespace QobuzMusicDownloader.Forms
 
             if (_currentSearchType == SearchFilter.Albums)
             {
-                foreach (var album in _currentSearchResults.Albums.Items)
+                foreach (var album in _loadedAlbums)
                 {
-                    if (album == null) continue;
                     var albumCard = new ItemCard(album: album);
                     //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
                     //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
@@ -182,9 +172,8 @@ namespace QobuzMusicDownloader.Forms
             }
             else if (_currentSearchType == SearchFilter.Tracks)
             {
-                foreach (var track in _currentSearchResults.Tracks.Items)
+                foreach (var track in _loadedTracks)
                 {
-                    if (track == null) continue;
                     var trackCard = new ItemCard(track: track);
                     //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
                     //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
