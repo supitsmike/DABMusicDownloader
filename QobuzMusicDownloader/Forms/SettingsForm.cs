@@ -14,7 +14,7 @@ namespace QobuzMusicDownloader.Forms
             txtDownloadLocation.Text = Settings.Default.DownloadLocation;
             cmbDownloadQuality.SelectedValue = Settings.Default.DownloadQuality;
             nudConcurrentDownloads.Value = Settings.Default.ConcurrentDownloads;
-            nudSearchResultLimit.Value = Settings.Default.SearchResultLimit;
+            nudSearchPageLimit.Value = Settings.Default.SearchPageLimit;
             chkDarkMode.Checked = Settings.Default.DarkMode;
         }
 
@@ -40,7 +40,7 @@ namespace QobuzMusicDownloader.Forms
             Settings.Default.DownloadLocation = txtDownloadLocation.Text;
             Settings.Default.DownloadQuality = Convert.ToInt32(cmbDownloadQuality.SelectedValue);
             Settings.Default.ConcurrentDownloads = Convert.ToInt32(nudConcurrentDownloads.Value);
-            Settings.Default.SearchResultLimit = Convert.ToInt32(nudSearchResultLimit.Value);
+            Settings.Default.SearchPageLimit = Convert.ToInt32(nudSearchPageLimit.Value);
             Settings.Default.DarkMode = chkDarkMode.Checked;
             Settings.Default.Save();
             DialogResult = DialogResult.OK;

@@ -61,13 +61,13 @@ namespace QobuzMusicDownloader.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int SearchResultLimit {
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int SearchPageLimit {
             get {
-                return ((int)(this["SearchResultLimit"]));
+                return ((int)(this["SearchPageLimit"]));
             }
             set {
-                this["SearchResultLimit"] = value;
+                this["SearchPageLimit"] = value;
             }
         }
         

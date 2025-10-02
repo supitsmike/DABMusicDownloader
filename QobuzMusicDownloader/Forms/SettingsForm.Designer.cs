@@ -36,25 +36,25 @@
             nudConcurrentDownloads = new NumericUpDown();
             txtDownloadLocation = new TextBox();
             lblDownloadLocation = new Label();
-            nudSearchResultLimit = new NumericUpDown();
-            lblSearchResultLimit = new Label();
+            nudSearchPageLimit = new NumericUpDown();
+            lblSearchPageLimit = new Label();
             cmbDownloadQuality = new ComboBox();
             lblDownloadQuality = new Label();
             chkDarkMode = new CheckBox();
             lblDarkMode = new Label();
             btnBrowse = new Button();
             ((System.ComponentModel.ISupportInitialize)nudConcurrentDownloads).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)nudSearchResultLimit).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudSearchPageLimit).BeginInit();
             SuspendLayout();
             // 
             // lblBaseURL
             // 
-            lblBaseURL.AutoSize = true;
-            lblBaseURL.Location = new Point(86, 15);
+            lblBaseURL.Location = new Point(12, 12);
             lblBaseURL.Name = "lblBaseURL";
-            lblBaseURL.Size = new Size(58, 15);
+            lblBaseURL.Size = new Size(132, 23);
             lblBaseURL.TabIndex = 0;
             lblBaseURL.Text = "Base URL:";
+            lblBaseURL.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtBaseURL
             // 
@@ -87,16 +87,16 @@
             // 
             // lblConcurrentDownloads
             // 
-            lblConcurrentDownloads.AutoSize = true;
-            lblConcurrentDownloads.Location = new Point(12, 131);
+            lblConcurrentDownloads.Location = new Point(12, 129);
             lblConcurrentDownloads.Name = "lblConcurrentDownloads";
-            lblConcurrentDownloads.Size = new Size(132, 15);
+            lblConcurrentDownloads.Size = new Size(132, 23);
             lblConcurrentDownloads.TabIndex = 4;
             lblConcurrentDownloads.Text = "Concurrent Downloads:";
+            lblConcurrentDownloads.TextAlign = ContentAlignment.MiddleRight;
             // 
             // nudConcurrentDownloads
             // 
-            nudConcurrentDownloads.Location = new Point(150, 128);
+            nudConcurrentDownloads.Location = new Point(150, 129);
             nudConcurrentDownloads.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
             nudConcurrentDownloads.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudConcurrentDownloads.Name = "nudConcurrentDownloads";
@@ -106,7 +106,7 @@
             // 
             // txtDownloadLocation
             // 
-            txtDownloadLocation.Location = new Point(150, 70);
+            txtDownloadLocation.Location = new Point(150, 71);
             txtDownloadLocation.Name = "txtDownloadLocation";
             txtDownloadLocation.ReadOnly = true;
             txtDownloadLocation.Size = new Size(148, 23);
@@ -114,53 +114,54 @@
             // 
             // lblDownloadLocation
             // 
-            lblDownloadLocation.AutoSize = true;
-            lblDownloadLocation.Location = new Point(31, 73);
+            lblDownloadLocation.Location = new Point(12, 71);
             lblDownloadLocation.Name = "lblDownloadLocation";
-            lblDownloadLocation.Size = new Size(113, 15);
+            lblDownloadLocation.Size = new Size(132, 23);
             lblDownloadLocation.TabIndex = 9;
             lblDownloadLocation.Text = "Download Location:";
+            lblDownloadLocation.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // nudSearchResultLimit
+            // nudSearchPageLimit
             // 
-            nudSearchResultLimit.Location = new Point(150, 41);
-            nudSearchResultLimit.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            nudSearchResultLimit.Name = "nudSearchResultLimit";
-            nudSearchResultLimit.Size = new Size(40, 23);
-            nudSearchResultLimit.TabIndex = 12;
-            nudSearchResultLimit.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            nudSearchPageLimit.Location = new Point(150, 41);
+            nudSearchPageLimit.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            nudSearchPageLimit.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudSearchPageLimit.Name = "nudSearchPageLimit";
+            nudSearchPageLimit.Size = new Size(40, 23);
+            nudSearchPageLimit.TabIndex = 12;
+            nudSearchPageLimit.Value = new decimal(new int[] { 3, 0, 0, 0 });
             // 
-            // lblSearchResultLimit
+            // lblSearchPageLimit
             // 
-            lblSearchResultLimit.AutoSize = true;
-            lblSearchResultLimit.Location = new Point(34, 43);
-            lblSearchResultLimit.Name = "lblSearchResultLimit";
-            lblSearchResultLimit.Size = new Size(110, 15);
-            lblSearchResultLimit.TabIndex = 11;
-            lblSearchResultLimit.Text = "Search Result Limit:";
+            lblSearchPageLimit.Location = new Point(12, 41);
+            lblSearchPageLimit.Name = "lblSearchPageLimit";
+            lblSearchPageLimit.Size = new Size(132, 23);
+            lblSearchPageLimit.TabIndex = 11;
+            lblSearchPageLimit.Text = "Search Page Limit:";
+            lblSearchPageLimit.TextAlign = ContentAlignment.MiddleRight;
             // 
             // cmbDownloadQuality
             // 
             cmbDownloadQuality.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDownloadQuality.FormattingEnabled = true;
-            cmbDownloadQuality.Location = new Point(150, 99);
+            cmbDownloadQuality.Location = new Point(150, 100);
             cmbDownloadQuality.Name = "cmbDownloadQuality";
             cmbDownloadQuality.Size = new Size(175, 23);
             cmbDownloadQuality.TabIndex = 13;
             // 
             // lblDownloadQuality
             // 
-            lblDownloadQuality.AutoSize = true;
-            lblDownloadQuality.Location = new Point(39, 102);
+            lblDownloadQuality.Location = new Point(12, 100);
             lblDownloadQuality.Name = "lblDownloadQuality";
-            lblDownloadQuality.Size = new Size(105, 15);
+            lblDownloadQuality.Size = new Size(132, 23);
             lblDownloadQuality.TabIndex = 14;
             lblDownloadQuality.Text = "Download Quality:";
+            lblDownloadQuality.TextAlign = ContentAlignment.MiddleRight;
             // 
             // chkDarkMode
             // 
             chkDarkMode.AutoSize = true;
-            chkDarkMode.Location = new Point(150, 159);
+            chkDarkMode.Location = new Point(150, 158);
             chkDarkMode.Name = "chkDarkMode";
             chkDarkMode.Size = new Size(15, 14);
             chkDarkMode.TabIndex = 15;
@@ -168,16 +169,16 @@
             // 
             // lblDarkMode
             // 
-            lblDarkMode.AutoSize = true;
-            lblDarkMode.Location = new Point(76, 158);
+            lblDarkMode.Location = new Point(12, 153);
             lblDarkMode.Name = "lblDarkMode";
-            lblDarkMode.Size = new Size(68, 15);
+            lblDarkMode.Size = new Size(132, 23);
             lblDarkMode.TabIndex = 16;
             lblDarkMode.Text = "Dark Mode:";
+            lblDarkMode.TextAlign = ContentAlignment.MiddleRight;
             // 
             // btnBrowse
             // 
-            btnBrowse.Location = new Point(304, 70);
+            btnBrowse.Location = new Point(301, 71);
             btnBrowse.Name = "btnBrowse";
             btnBrowse.Size = new Size(24, 23);
             btnBrowse.TabIndex = 17;
@@ -195,8 +196,8 @@
             Controls.Add(chkDarkMode);
             Controls.Add(lblDownloadQuality);
             Controls.Add(cmbDownloadQuality);
-            Controls.Add(nudSearchResultLimit);
-            Controls.Add(lblSearchResultLimit);
+            Controls.Add(nudSearchPageLimit);
+            Controls.Add(lblSearchPageLimit);
             Controls.Add(txtDownloadLocation);
             Controls.Add(lblDownloadLocation);
             Controls.Add(nudConcurrentDownloads);
@@ -211,7 +212,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)nudConcurrentDownloads).EndInit();
-            ((System.ComponentModel.ISupportInitialize)nudSearchResultLimit).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudSearchPageLimit).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -226,8 +227,8 @@
         private NumericUpDown nudConcurrentDownloads;
         private TextBox txtDownloadLocation;
         private Label lblDownloadLocation;
-        private NumericUpDown nudSearchResultLimit;
-        private Label lblSearchResultLimit;
+        private NumericUpDown nudSearchPageLimit;
+        private Label lblSearchPageLimit;
         private ComboBox cmbDownloadQuality;
         private Label lblDownloadQuality;
         private CheckBox chkDarkMode;

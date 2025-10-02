@@ -1,4 +1,5 @@
 ﻿using QobuzMusicDownloader.Controls;
+using QobuzMusicDownloader.Properties;
 using QobuzMusicDownloader.QobuzDL;
 using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Core;
@@ -10,6 +11,7 @@ namespace QobuzMusicDownloader.Forms
     {
         private readonly List<QobuzAlbum> _loadedAlbums = [];
         private readonly List<QobuzTrack> _loadedTracks = [];
+        private readonly int _currentSearchLimit = 10;
 
         private bool _isSearching;
         private string _currentSearchQuery = string.Empty;
@@ -75,9 +77,10 @@ namespace QobuzMusicDownloader.Forms
                 _loadedAlbums.Clear();
                 _loadedTracks.Clear();
 
-                await GetMusicFromQobuzDL().ConfigureAwait(false);
-                await GetMusicFromQobuzDL(true).ConfigureAwait(false);
-                await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+                for (var i = 0; i < Settings.Default.SearchPageLimit; i++)
+                {
+                    await GetMusicFromQobuzDL(i != 0).ConfigureAwait(false);
+                }
             }
             catch (Exception)
             {
@@ -133,7 +136,7 @@ namespace QobuzMusicDownloader.Forms
 
             try
             {
-                if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
+                if (loadMore) _currentSearchOffset += _currentSearchLimit;
 
                 var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset).ConfigureAwait(false);
                 if (response?.Data == null) return;
@@ -153,8 +156,10 @@ namespace QobuzMusicDownloader.Forms
         {
             if (flpSearchResults.VerticalScroll.Value < (flpSearchResults.VerticalScroll.Maximum - flpSearchResults.VerticalScroll.LargeChange)) return;
 
-            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
-            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+            for (var i = 0; i < Settings.Default.SearchPageLimit; i++)
+            {
+                await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+            }
         }
 
         private void AddAlbumCards(IEnumerable<QobuzAlbum> albums)
