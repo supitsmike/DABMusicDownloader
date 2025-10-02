@@ -22,6 +22,29 @@ namespace QobuzMusicDownloader.Forms
 
             cmbSearchType.SelectedIndex = 0;
             txtSearchQuery.Text = @"Kanye West";
+            txtSearchQuery.Focus();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (Properties.Settings.Default.DarkMode)
+            {
+                BackColor = Color.FromArgb(20, 20, 20);
+                ForeColor = SystemColors.Control;
+            }
+            else
+            {
+                BackColor = SystemColors.Control;
+                ForeColor = SystemColors.ControlText;
+            }
+
+            base.OnPaint(e);
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            new SettingsForm().ShowDialog(this);
+            Invalidate();
         }
 
         private void txtSearchQuery_KeyDown(object sender, KeyEventArgs e)
@@ -34,9 +57,14 @@ namespace QobuzMusicDownloader.Forms
             e.SuppressKeyPress = true;
         }
 
+        private void txtSearchQuery_TextChanged(object sender, EventArgs e)
+        {
+            btnSearch.Enabled = string.IsNullOrWhiteSpace(txtSearchQuery.Text) == false;
+        }
+
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            btnSearch.Enabled = false;
+            if (_isSearching) return;
             flpSearchResults.Controls.Clear();
 
             _currentSearchQuery = txtSearchQuery.Text;
@@ -45,29 +73,36 @@ namespace QobuzMusicDownloader.Forms
             _loadedAlbums.Clear();
             _loadedTracks.Clear();
 
-                await GetMusicFromQobuzDL();
-                await GetMusicFromQobuzDL(true);
-                await GetMusicFromQobuzDL(true);
+            await GetMusicFromQobuzDL().ConfigureAwait(false);
+            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+        }
 
-            btnSearch.Enabled = true;
+        private void cmbSearchType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_currentSearchType == (SearchFilter)cmbSearchType.SelectedIndex) return;
+
+            _currentSearchType = (SearchFilter)cmbSearchType.SelectedIndex;
+            if (_currentSearchType == SearchFilter.Artists)
+            {
+                MessageBox.Show(@"Artist Search is not supported.", @"Not Supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cmbSearchType.SelectedIndex = 0;
+                _currentSearchType = SearchFilter.Albums;
+                return;
+            }
+
+            flpSearchResults.Controls.Clear();
+            AddItemCards();
         }
 
         private async void flpSearchResults_Scroll(object sender, ScrollEventArgs e)
         {
-            if (sender is not FlowLayoutPanel panel) return;
-            if (panel.VerticalScroll.Value < (panel.VerticalScroll.Maximum - panel.VerticalScroll.LargeChange)) return;
-
-            await GetMusicFromQobuzDL(true);
-            await GetMusicFromQobuzDL(true);
+            await LoadMoreFromScroll();
         }
 
         private async void flpSearchResults_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (sender is not FlowLayoutPanel panel) return;
-            if (panel.VerticalScroll.Value < (panel.VerticalScroll.Maximum - panel.VerticalScroll.LargeChange)) return;
-
-            await GetMusicFromQobuzDL(true);
-            await GetMusicFromQobuzDL(true);
+            await LoadMoreFromScroll();
         }
 
         private async Task GetMusicFromQobuzDL(bool loadMore = false)
@@ -79,51 +114,72 @@ namespace QobuzMusicDownloader.Forms
             {
                 if (loadMore) _currentSearchOffset += Properties.Settings.Default.SearchResultLimit;
 
-                flpSearchResults.SuspendLayout();
-                _skeletonCards.Clear();
-                for (var i = 0; i < Properties.Settings.Default.SearchResultLimit; i++)
-                {
-                    var itemCard = new ItemCard();
-                    _skeletonCards.Add(itemCard);
-                    flpSearchResults.Controls.Add(itemCard);
-                }
+                var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset).ConfigureAwait(false);
+                if (response.Data == null) return;
 
-                var response = await QobuzDLAPI.GetMusicAsync(_currentSearchQuery, _currentSearchOffset);
-                foreach (var skeletonCard in _skeletonCards.ToList())
-                {
-                    _skeletonCards.Remove(skeletonCard);
-                    flpSearchResults.Controls.Remove(skeletonCard);
-                }
-                if (response == null || response.Data == null) return;
-
-
-                if (_currentSearchType == SearchFilter.Albums)
-                {
-                    foreach (var album in _loadedAlbums)
-                    {
-                        var albumCard = new ItemCard(album: album);
-                        //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
-                        //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
-
-                        flpSearchResults.Controls.Add(albumCard);
-                    }
-                }
-                if (_currentSearchType == SearchFilter.Tracks)
-                {
-                    foreach (var track in _loadedTracks)
-                    {
-                        var trackCard = new ItemCard(track: track);
-                        //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
-                        //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
-
-                        flpSearchResults.Controls.Add(trackCard);
-                    }
-                }
+                _loadedAlbums.AddRange(response.Data.Albums.Items);
+                _loadedTracks.AddRange(response.Data.Tracks.Items);
+                
+                AddItemCards();
             }
             finally
             {
                 _isSearching = false;
-                flpSearchResults.ResumeLayout();
+            }
+        }
+
+        private async Task LoadMoreFromScroll()
+        {
+            if (flpSearchResults.VerticalScroll.Value < (flpSearchResults.VerticalScroll.Maximum - flpSearchResults.VerticalScroll.LargeChange)) return;
+
+            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+        }
+
+        private void AddAlbumCards()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(AddAlbumCards);
+                return;
+            }
+
+            foreach (var album in _loadedAlbums)
+            {
+                var albumCard = new ItemCard(album: album);
+                //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
+                //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
+
+                flpSearchResults.Controls.Add(albumCard);
+            }
+        }
+
+        private void AddTrackCards()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(AddTrackCards);
+                return;
+            }
+
+            foreach (var track in _loadedTracks)
+            {
+                var trackCard = new ItemCard(track: track);
+                //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
+                //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
+
+                flpSearchResults.Controls.Add(trackCard);
+            }
+        }
+
+        private void AddItemCards()
+        {
+            switch (_currentSearchType)
+            {
+                case SearchFilter.Albums: AddAlbumCards(); break;
+                case SearchFilter.Tracks: AddTrackCards(); break;
+                case SearchFilter.Artists:
+                default: throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -146,69 +202,5 @@ namespace QobuzMusicDownloader.Forms
         //{
         //    MessageBox.Show($@"Double Clicked: {track.Title} by {track.Album.Artist.Name}");
         //}
-
-        private void txtSearchQuery_TextChanged(object sender, EventArgs e)
-        {
-            btnSearch.Enabled = string.IsNullOrWhiteSpace(txtSearchQuery.Text) == false;
-        }
-
-        private void cmbSearchType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_currentSearchType == (SearchFilter)cmbSearchType.SelectedIndex) return;
-
-            _currentSearchType = (SearchFilter)cmbSearchType.SelectedIndex;
-            flpSearchResults.Controls.Clear();
-
-            if (_currentSearchType == SearchFilter.Albums)
-            {
-                foreach (var album in _loadedAlbums)
-                {
-                    var albumCard = new ItemCard(album: album);
-                    //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
-                    //albumCard.AlbumDoubleClicked += (s, e) => OnAlbumDoubleClick(album);
-
-                    flpSearchResults.Controls.Add(albumCard);
-                }
-            }
-            else if (_currentSearchType == SearchFilter.Tracks)
-            {
-                foreach (var track in _loadedTracks)
-                {
-                    var trackCard = new ItemCard(track: track);
-                    //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
-                    //trackCard.TrackDoubleClicked += (s, e) => OnTrackDoubleClick(track);
-
-                    flpSearchResults.Controls.Add(trackCard);
-                }
-            }
-            else if (_currentSearchType == SearchFilter.Artists)
-            {
-                MessageBox.Show(@"Artist Search is not supported.", @"Not Implemented", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cmbSearchType.SelectedIndex = 0;
-                _currentSearchType = SearchFilter.Albums;
-            }
-        }
-
-        private void btnSettings_Click(object sender, EventArgs e)
-        {
-            new SettingsForm().ShowDialog(this);
-            Invalidate();
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (Properties.Settings.Default.DarkMode)
-            {
-                BackColor = Color.FromArgb(20, 20, 20);
-                ForeColor = SystemColors.Control;
-            }
-            else
-            {
-                BackColor = SystemColors.Control;
-                ForeColor = SystemColors.ControlText;
-            }
-
-            base.OnPaint(e);
-        }
     }
 }
