@@ -99,7 +99,7 @@ namespace QobuzMusicDownloader.Forms
             }
 
             flpSearchResults.Controls.Clear();
-            AddItemCards();
+            AddItemCards(_loadedAlbums, _loadedTracks);
         }
 
         private async void flpSearchResults_Scroll(object sender, ScrollEventArgs e)
@@ -141,7 +141,7 @@ namespace QobuzMusicDownloader.Forms
                 _loadedAlbums.AddRange(response.Data.Albums.Items);
                 _loadedTracks.AddRange(response.Data.Tracks.Items);
                 
-                AddItemCards();
+                AddItemCards(response.Data.Albums.Items, response.Data.Tracks.Items);
             }
             finally
             {
@@ -157,15 +157,15 @@ namespace QobuzMusicDownloader.Forms
             await GetMusicFromQobuzDL(true).ConfigureAwait(false);
         }
 
-        private void AddAlbumCards()
+        private void AddAlbumCards(IEnumerable<QobuzAlbum> albums)
         {
             if (InvokeRequired)
             {
-                Invoke(AddAlbumCards);
+                Invoke(AddAlbumCards, albums);
                 return;
             }
 
-            foreach (var album in _loadedAlbums)
+            foreach (var album in albums)
             {
                 var albumCard = new ItemCard(album: album);
                 //albumCard.AlbumClicked += (s, e) => OnAlbumClicked(album);
@@ -175,15 +175,15 @@ namespace QobuzMusicDownloader.Forms
             }
         }
 
-        private void AddTrackCards()
+        private void AddTrackCards(IEnumerable<QobuzTrack> tracks)
         {
             if (InvokeRequired)
             {
-                Invoke(AddTrackCards);
+                Invoke(AddTrackCards, tracks);
                 return;
             }
 
-            foreach (var track in _loadedTracks)
+            foreach (var track in tracks)
             {
                 var trackCard = new ItemCard(track: track);
                 //trackCard.TrackClicked += (s, e) => OnTrackClicked(track);
@@ -193,12 +193,12 @@ namespace QobuzMusicDownloader.Forms
             }
         }
 
-        private void AddItemCards()
+        private void AddItemCards(IEnumerable<QobuzAlbum> albums, IEnumerable<QobuzTrack> tracks)
         {
             switch (_currentSearchType)
             {
-                case SearchFilter.Albums: AddAlbumCards(); break;
-                case SearchFilter.Tracks: AddTrackCards(); break;
+                case SearchFilter.Albums: AddAlbumCards(albums); break;
+                case SearchFilter.Tracks: AddTrackCards(tracks); break;
                 case SearchFilter.Artists:
                 default: throw new ArgumentOutOfRangeException();
             }
