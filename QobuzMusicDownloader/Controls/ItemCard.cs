@@ -39,6 +39,11 @@ namespace QobuzMusicDownloader.Controls
                     Size = new Size(200, 237);
 
                     lblItemTitle.Text = _album.Title;
+                    if (string.IsNullOrWhiteSpace(_album.Version) == false)
+                    {
+                        lblItemTitle.Text += $@" ({_album.Version})";
+                    }
+
                     lblArtistName.Text = _album.Artist.Name;
 
                     if (_album.ParentalWarning == false)
@@ -49,17 +54,23 @@ namespace QobuzMusicDownloader.Controls
                     }
 
                     _albumCover = await _imageCacheService.GetImageAsync(_album.Image.Small, _album.Id);
-
-                    toolTip.SetToolTip(pnlAlbumCover, _album.Title);
-                    pnlAlbumCover.Invalidate();
                 }
                 else if (_track != null)
                 {
                     Size = new Size(200, 255);
 
                     lblItemTitle.Text = _track.Title;
+                    if (string.IsNullOrWhiteSpace(_track.Version) == false)
+                    {
+                        lblItemTitle.Text += $@" ({_track.Version})";
+                    }
+
                     lblArtistName.Text = _track.Album.Artist.Name;
                     lblAlbumTitle.Text = _track.Album.Title;
+                    if (string.IsNullOrWhiteSpace(_track.Album.Version) == false)
+                    {
+                        lblAlbumTitle.Text += $@" ({_track.Album.Version})";
+                    }
 
                     if (_track.Album.ParentalWarning == false)
                     {
@@ -69,9 +80,6 @@ namespace QobuzMusicDownloader.Controls
                     }
 
                     _albumCover = await _imageCacheService.GetImageAsync(_track.Album.Image.Small, _track.Album.Id);
-
-                    toolTip.SetToolTip(pnlAlbumCover, _track.Title);
-                    pnlAlbumCover.Invalidate();
                 }
                 else
                 {
@@ -81,6 +89,11 @@ namespace QobuzMusicDownloader.Controls
             catch (Exception e)
             {
                 // ignore
+            }
+            finally
+            {
+                toolTip.SetToolTip(pnlAlbumCover, lblItemTitle.Text);
+                pnlAlbumCover.Invalidate();
             }
         }
 
