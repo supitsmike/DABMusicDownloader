@@ -64,18 +64,25 @@ namespace QobuzMusicDownloader.Forms
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
-            if (_isSearching) return;
-            flpSearchResults.Controls.Clear();
+            try
+            {
+                if (_isSearching) return;
+                flpSearchResults.Controls.Clear();
 
-            _currentSearchQuery = txtSearchQuery.Text;
-            _currentSearchOffset = 0;
+                _currentSearchQuery = txtSearchQuery.Text;
+                _currentSearchOffset = 0;
 
-            _loadedAlbums.Clear();
-            _loadedTracks.Clear();
+                _loadedAlbums.Clear();
+                _loadedTracks.Clear();
 
-            await GetMusicFromQobuzDL().ConfigureAwait(false);
-            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
-            await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+                await GetMusicFromQobuzDL().ConfigureAwait(false);
+                await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+                await GetMusicFromQobuzDL(true).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private void cmbSearchType_SelectedIndexChanged(object sender, EventArgs e)
@@ -97,12 +104,26 @@ namespace QobuzMusicDownloader.Forms
 
         private async void flpSearchResults_Scroll(object sender, ScrollEventArgs e)
         {
-            await LoadMoreFromScroll();
+            try
+            {
+                await LoadMoreFromScroll();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private async void flpSearchResults_MouseWheel(object sender, MouseEventArgs e)
         {
-            await LoadMoreFromScroll();
+            try
+            {
+                await LoadMoreFromScroll();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private async Task GetMusicFromQobuzDL(bool loadMore = false)
