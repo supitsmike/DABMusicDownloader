@@ -1,8 +1,8 @@
-﻿using QobuzMusicDownloader.QobuzDL;
+﻿using QobuzMusicDownloader.Controls;
+using QobuzMusicDownloader.QobuzDL;
 using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Core;
 using QobuzMusicDownloader.QobuzDL.Track;
-using QobuzMusicDownloader.UserControls;
 
 namespace QobuzMusicDownloader.Forms
 {

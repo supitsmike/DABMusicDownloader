@@ -1,7 +1,4 @@
-﻿using QobuzMusicDownloader.CustomControls;
-using System.Reflection;
-
-namespace QobuzMusicDownloader.UserControls
+﻿namespace QobuzMusicDownloader.Controls
 {
     partial class ItemCard
     {

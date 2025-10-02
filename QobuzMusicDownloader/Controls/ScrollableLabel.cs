@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace QobuzMusicDownloader.CustomControls
+namespace QobuzMusicDownloader.Controls
 {
     public partial class ScrollableLabel : Label
     {

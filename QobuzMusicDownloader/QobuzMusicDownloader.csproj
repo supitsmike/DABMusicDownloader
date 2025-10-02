@@ -29,7 +29,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="UserControls\ItemCard.cs">
+    <Compile Update="Controls\ItemCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

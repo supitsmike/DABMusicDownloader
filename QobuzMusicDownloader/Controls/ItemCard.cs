@@ -1,10 +1,10 @@
-﻿using QobuzMusicDownloader.Extensions;
+﻿using System.Drawing.Drawing2D;
+using QobuzMusicDownloader.Extensions;
 using QobuzMusicDownloader.QobuzDL.Album;
 using QobuzMusicDownloader.QobuzDL.Track;
 using QobuzMusicDownloader.Services;
-using System.Drawing.Drawing2D;
 
-namespace QobuzMusicDownloader.UserControls
+namespace QobuzMusicDownloader.Controls
 {
     public partial class ItemCard : UserControl
     {

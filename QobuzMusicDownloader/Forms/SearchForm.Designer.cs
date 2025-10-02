@@ -1,6 +1,4 @@
-﻿using QobuzMusicDownloader.CustomControls;
-
-namespace QobuzMusicDownloader.Forms
+﻿namespace QobuzMusicDownloader.Forms
 {
     partial class SearchForm
     {

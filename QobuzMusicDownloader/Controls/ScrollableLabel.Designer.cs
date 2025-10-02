@@ -1,6 +1,6 @@
 ﻿using Timer = System.Windows.Forms.Timer;
 
-namespace QobuzMusicDownloader.CustomControls
+namespace QobuzMusicDownloader.Controls
 {
     partial class ScrollableLabel
     {
