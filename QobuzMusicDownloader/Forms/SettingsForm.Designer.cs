@@ -42,6 +42,7 @@
             lblDownloadQuality = new Label();
             chkDarkMode = new CheckBox();
             lblDarkMode = new Label();
+            btnBrowse = new Button();
             ((System.ComponentModel.ISupportInitialize)nudConcurrentDownloads).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudSearchResultLimit).BeginInit();
             SuspendLayout();
@@ -108,9 +109,8 @@
             txtDownloadLocation.Location = new Point(150, 70);
             txtDownloadLocation.Name = "txtDownloadLocation";
             txtDownloadLocation.ReadOnly = true;
-            txtDownloadLocation.Size = new Size(175, 23);
+            txtDownloadLocation.Size = new Size(148, 23);
             txtDownloadLocation.TabIndex = 10;
-            txtDownloadLocation.Click += txtDownloadLocation_Click;
             // 
             // lblDownloadLocation
             // 
@@ -175,11 +175,22 @@
             lblDarkMode.TabIndex = 16;
             lblDarkMode.Text = "Dark Mode:";
             // 
+            // btnBrowse
+            // 
+            btnBrowse.Location = new Point(304, 70);
+            btnBrowse.Name = "btnBrowse";
+            btnBrowse.Size = new Size(24, 23);
+            btnBrowse.TabIndex = 17;
+            btnBrowse.Text = "...";
+            btnBrowse.UseVisualStyleBackColor = true;
+            btnBrowse.Click += btnBrowse_Click;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(337, 214);
+            Controls.Add(btnBrowse);
             Controls.Add(lblDarkMode);
             Controls.Add(chkDarkMode);
             Controls.Add(lblDownloadQuality);
@@ -221,5 +232,6 @@
         private Label lblDownloadQuality;
         private CheckBox chkDarkMode;
         private Label lblDarkMode;
+        private Button btnBrowse;
     }
 }

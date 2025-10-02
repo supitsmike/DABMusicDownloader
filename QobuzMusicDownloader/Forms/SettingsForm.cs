@@ -18,6 +18,20 @@ namespace QobuzMusicDownloader.Forms
             chkDarkMode.Checked = Settings.Default.DarkMode;
         }
 
+        private void InitializeDownloadQuality()
+        {
+            cmbDownloadQuality.DataSource = new List<ComboBoxDataSource>
+            {
+                new("Hi-Res (up to 24-bit/192kHz)", Convert.ToInt32(AudioQuality.HiRes)),
+                new("FLAC Lossless", Convert.ToInt32(AudioQuality.Lossless)),
+                new("CD Quality (16-bit/44.1kHz)", Convert.ToInt32(AudioQuality.CdQuality)),
+                new("MP3 320kbps", Convert.ToInt32(AudioQuality.High))
+            };
+
+            cmbDownloadQuality.DisplayMember = nameof(ComboBoxDataSource.DisplayMember);
+            cmbDownloadQuality.ValueMember = nameof(ComboBoxDataSource.ValueMember);
+        }
+
         private void btnCancel_Click(object sender, EventArgs e) => DialogResult = DialogResult.Cancel;
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -32,43 +46,7 @@ namespace QobuzMusicDownloader.Forms
             DialogResult = DialogResult.OK;
         }
 
-        private void InitializeDownloadQuality()
-        {
-            cmbDownloadQuality.DataSource = new List<ComboBoxDataSource>
-            {
-                new()
-                {
-                    DisplayMember = "Hi-Res (up to 24-bit/192kHz)",
-                    ValueMember = Convert.ToInt32(AudioQuality.HiRes)
-                },
-                new()
-                {
-                    DisplayMember = "FLAC Lossless",
-                    ValueMember = Convert.ToInt32(AudioQuality.Lossless)
-                },
-                new()
-                {
-                    DisplayMember = "CD Quality (16-bit/44.1kHz)",
-                    ValueMember = Convert.ToInt32(AudioQuality.CdQuality)
-                },
-                new()
-                {
-                    DisplayMember = "MP3 320kbps",
-                    ValueMember = Convert.ToInt32(AudioQuality.High)
-                }
-            };
-
-            cmbDownloadQuality.DisplayMember = nameof(ComboBoxDataSource.DisplayMember);
-            cmbDownloadQuality.ValueMember = nameof(ComboBoxDataSource.ValueMember);
-        }
-
-        private class ComboBoxDataSource
-        {
-            public string DisplayMember { get; set; }
-            public object ValueMember { get; set; }
-        }
-
-        private void txtDownloadLocation_Click(object sender, EventArgs e)
+        private void btnBrowse_Click(object sender, EventArgs e)
         {
             using var folderDialog = new FolderBrowserDialog();
             folderDialog.Description = @"Select Download Location";
@@ -80,18 +58,10 @@ namespace QobuzMusicDownloader.Forms
             }
         }
 
-        //private void btnBrowse_Click(object sender, EventArgs e)
-        //{
-        //    using var folderDialog = new FolderBrowserDialog
-        //    {
-        //        Description = "Select Download Location",
-        //        SelectedPath = txtDownloadLocation.Text,
-        //        ShowNewFolderButton = true
-        //    };
-        //    if (folderDialog.ShowDialog() == DialogResult.OK)
-        //    {
-        //        txtDownloadLocation.Text = folderDialog.SelectedPath;
-        //    }
-        //}
+        private class ComboBoxDataSource(string displayMember, object valueMember)
+        {
+            public string DisplayMember { get; set; } = displayMember;
+            public object ValueMember { get; set; } = valueMember;
+        }
     }
 }
